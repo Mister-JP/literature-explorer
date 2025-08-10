@@ -5,6 +5,9 @@
 - Add Make targets `e2e`/`e2e-ci`; update `requirements.txt` for playwright, pytest-playwright, ruff, black.
 - Adjust `ui_search.html` header rendering to always include result metadata container for tests.
 - Implement T-02 zero-results test and fix async JSON parsing in `/ui/report` and `/ui/telemetry`.
+- Add T-03 details test (+ artifacts), T-04 filters URL sync (+ artifact), T-05 star/export (+ CSV artifacts).
+- Add T-06 visual baseline with Pillow; baseline created.
+- Add T-07 synthetic monitor E2E wrapper.
 
 ## 0.2.0 - Phase-2
 

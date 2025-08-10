@@ -146,10 +146,12 @@ make e2e-ci    # CI mode, writes artifacts to artifacts/ui-e2e/
 
 **AC**
 
-* [ ] Minimal script runs seeded positive and zero queries, asserts nonzero and zero respectively, and measures latency.
-* [ ] If assertions fail or latency exceeds threshold, post an alert (webhook/log) and attach a screenshot.
+* [x] Minimal script runs seeded positive and zero queries, asserts nonzero and zero respectively, and measures latency.
+* [x] If assertions fail or latency exceeds threshold, post an alert (webhook/log) and attach a screenshot.
 
 **Schedule:** nightly (and manual trigger).
+
+- Completed 2025-08-10 by gpt-5-agent. Local run green via `make monitor`; E2E wrapper added at `ui-tests/e2e/test_t07_synthetic_monitor.py`.
 
 ---
 
