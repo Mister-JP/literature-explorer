@@ -95,6 +95,16 @@ JSON like `{ "stored": N, "skipped": M, "errors": E }`. Metadata stored in DB, P
 ### CI
 GitHub Actions runs linting (ruff, black) and tests (pytest) on each PR/push to `main`.
 
+#### Runbook: Debugging a failed UI E2E
+- Download the `ui-e2e-artifacts` artifact from the CI run (screenshots and any emitted traces)
+- Inspect the CI job logs for `uvicorn.log` and saved diagnostics under `ci-diagnostics`
+- Reproduce locally:
+  - Ensure OpenSearch is running and data is seeded: `make search-up && make seed-demo-ui && make reindex`
+  - Start API: `make api`
+  - Run E2E: `make e2e`
+- Override base URL if reproducing against a remote: `BASE_URL=https://your-env.example.com make e2e`
+- For nightly synthetic monitor failures, check `synthetic-monitor-log` artifact in the `Nightly Synthetic Monitor` workflow and the alert webhook destination.
+
 ### Notes on licensing & compliance
 - We normalize licenses (e.g., "CC BY 4.0" -> `cc-by`). PDFs are downloaded only for permissive licenses: `cc-*`, `cc0`, or `public-domain`. Others are treated as metadata-only.
   - Enforcement lives in `ingestion.utils.license_permits_pdf_storage` and is applied during ingestion.
