@@ -167,15 +167,7 @@ Semantic re-ranking (optional):
 - When enabled, `/search` includes a `ranking_breakdown` per hit; `/paper/{id}` does not include ranking info.
 
 ### Minimal UI
-- `GET /ui/search?q=...&size=20` renders a searchable table with:
-  - Result header: total count, server latency (ms), active sort, and active filter badges
-  - Filters: source, license, venue, year range, `has_summary` with URL sync ("thread" filter pending)
-  - Zero-result empty state with guidance and a "Report this search" action (privacy-safe, hashed query)
-  - Inline summaries (clamped with accessible "Show more" toggles)
-  - Provenance under titles (source badge, DOI/arXiv/PMC links when available)
-  - Row expanders to show parsed sections (Abstract, Methods, Results, Conclusion)
-  - Star items locally and export visible/starred rows to CSV
-  - Debug overlay showing last payload, count, latency, and sort
+- `GET /ui/search?q=...&size=20` renders a simple table with title, year, citation count, license badge, and inline summary. Rows can expand to show parsed sections (Abstract, Methods, Results, Conclusion) when available.
 
 ### Developer experience
 - Pre-commit hooks: run `pre-commit` once, or `make pre-commit` to format and lint

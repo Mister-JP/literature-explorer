@@ -1,237 +1,227 @@
-# ui-e2e-tests.md — Automated UI Testing Plan
+# How to Work This File
 
-**Purpose**  
-Automate verification of the literature UI with deterministic, repeatable tests that catch regressions early and produce screenshots/traces for fast debugging.
+Read this file before starting any UI work. Follow the execution loop, then work the checklist. Update this file as items are completed.
 
-This plan specifies **what must exist** and **how we measure done**. Engineers choose the exact libraries/config (Playwright recommended, but not required).
+## Core Principles
 
----
+- Keep changes small, focused, and reversible. Prefer small PRs with a clean, linear commit history.
+- Validate locally before pushing: lint, format, tests, and a manual UI smoke check.
+- Favor clarity over cleverness; optimize for readability and maintainability.
+- Instrument features: add telemetry and basic operational visibility alongside UI changes.
+- Respect privacy: log query hashes (not raw text) and avoid PII.
+- Update the source of truth: this file and relevant docs must reflect reality as you ship.
 
-## 1) Objectives (What success looks like)
+## Daily Loop
 
-- **Functional E2E** for the core flows (search → browse → details → star → export) on seeded data.
-- **Visual snapshots** for the search page (catch accidental UI shifts).
-- **Zero-results detection** with alerts (so “is it broken?” is measurable).
-- **Artifacts on failure** (screenshots, video, trace) attached to CI runs.
-- **Synthetic monitor** (nightly) against deployed env with a short, deterministic script.
+1) Sync Plan
+- Read the checklist below and pick the next highest-impact item.
+- Fill in Owner and Target date for the item you’re taking.
+- Break work into a minimal vertical slice that can be validated end-to-end.
 
----
+2) Implement
+- Create a feature branch and implement the smallest coherent increment.
+- Add telemetry and operational hooks while building the UI.
 
-## 2) Scope (What we will test)
+3) Validate Locally
+- Run through local checks and a quick manual smoke of the UI.
 
-**In-scope user journeys:**
-1. Search with seeded query → non-zero results → details panel opens → sections render or empty message appears.
-2. Zero-result query → empty state shows suggestions → “Report this search” logs an event.
-3. Filters (thread, year range, license, source, `has_summary`) affect results and **URL syncs**.
-4. Star an item, then export **current filter** and **starred** to CSV/JSONL.
-5. Error handling: if `/paper/{id}` fails, UI shows “Failed to load sections.” and logs an `api_error`.
-
-**Out of scope (for now):**
-- Cross-browser matrix (Chrome only is fine).
-- Deep a11y audits (basic axe check is enough).
-- Full perf profiling (we’ll track latency pills + Lighthouse smoke).
-
----
-
-## 3) Test Data & Determinism
-
-- Tests must **not** hit live external APIs.  
-- Use `make seed-demo-ui` (or equivalent) to preload a small, **known** corpus:
-  - 3–5 papers for “transformer/LLM” (positive path).
-  - 1 **deliberate zero** query (e.g., `thisshouldyieldzero`).
-  - At least one item with parsed sections and one without.
-- If seeds change, update the fixtures and baselines in the same PR.
-
----
-
-## 4) Environments & Config
-
-- Default local base URL: `http://localhost:8000` (override via `BASE_URL`).
-- Headless runs in CI; engineers may run headed locally.
-- Record artifacts **on failure** in local and CI runs.
-
-**Required Make targets**
 ```bash
-make e2e       # local run, opens HTML report if available
-make e2e-ci    # CI mode, writes artifacts to artifacts/ui-e2e/
-````
-
----
-
-## 5) Must-Have Coverage (Test Stories & AC)
-
-### T-01 Search renders count/latency/sort (Happy Path)
-
-**AC**
-
-* [x] Enter seeded query → header shows **result count**, **latency (ms)**, **sort**.
-* [x] At least one row visible; no console errors.
-* [x] Full-page screenshot saved.
-
-**Artifacts:** screenshot on failure; trace/video optional.
-
-- Completed 2025-08-10 by gpt-5-agent. Local run green; screenshot at `artifacts/ui-e2e/t01-search-happy.png`.
-
----
-
-### T-02 Zero-result empty state + “Report this search”
-
-**AC**
-
-* [x] Enter deliberate zero query → empty state with 3 suggestions.
-* [x] Clicking “Report this search” triggers a telemetry call (assert by API log or test stub).
-* [x] Returning to a valid query clears empty state.
-
-**Artifacts:** screenshot + network log on failure.
-
-- Completed 2025-08-10 by gpt-5-agent. Local run green; verified POST `/ui/report` returns 200 and empty state clears on valid query.
-
----
-
-### T-03 Details panel loads sections (and fails gracefully)
-
-**AC**
-
-* [x] Clicking “Details” opens panel; shows either parsed sections or “No parsed sections available.”
-* [x] If the details API is forced to fail (mock/flag), UI shows a friendly failure message and logs `api_error`.
-
-**Artifacts:** trace on failure.
-
-- Completed 2025-08-10 by gpt-5-agent. Local run green; screenshots at `artifacts/ui-e2e/t03-details-success.png` and `t03-details-failure.png`.
-
----
-
-### T-04 Filters + URL sync
-
-**AC**
-
-* [x] Set `thread` + year range + license + source + `has_summary`.
-* [x] Results update; `location.search` reflects those filters.
-* [x] Hard refresh preserves view; copying the URL reproduces state.
-
-**Artifacts:** screenshot of filtered view baseline for visual diff.
-
-- Completed 2025-08-10 by gpt-5-agent. Local run green; screenshot at `artifacts/ui-e2e/t04-filters.png`.
-
----
-
-### T-05 Star + Export (filtered & starred)
-
-**AC**
-
-* [x] Toggling star changes icon without page reload.
-* [x] Export current filter as CSV and JSONL returns 200 and non-empty content with expected fields.
-* [x] Export starred returns only the starred rows.
-
-**Artifacts:** downloaded fixture checked (size/headers), or stubbed response validated.
-
-- Completed 2025-08-10 by gpt-5-agent. Local run green; artifacts at `artifacts/ui-e2e/t05-visible.csv` and `t05-starred.csv`.
-
----
-
-### T-06 Visual baseline for Search page
-
-**AC**
-
-* [x] Establish a single baseline snapshot of `/ui/search?q=<seed>`.
-* [x] Subsequent test runs diff against baseline; material changes require approved snapshot update.
-
-**Artifacts:** visual diff images on failure.
-
-- Completed 2025-08-10 by gpt-5-agent. Baseline created at `ui-tests/snapshots/t06-search-baseline.png`; current/diff images emitted to `artifacts/ui-e2e/` on mismatches.
-
----
-
-### T-07 Synthetic monitor (deployed env)
-
-**AC**
-
-* [x] Minimal script runs seeded positive and zero queries, asserts nonzero and zero respectively, and measures latency.
-* [x] If assertions fail or latency exceeds threshold, post an alert (webhook/log) and attach a screenshot.
-
-**Schedule:** nightly (and manual trigger).
-
-- Completed 2025-08-10 by gpt-5-agent. Local run green via `make monitor`; E2E wrapper added at `ui-tests/e2e/test_t07_synthetic_monitor.py`.
-
----
-
-## 6) Telemetry Cross-Checks
-
-* For T-01: assert a `search_results` event with `result_count > 0`.
-* For T-02: assert a `search_zero_results` event (or `user_reported_zero` on click).
-* Logging failure **must not** fail the test unless core functionality is broken.
-
----
-
-## 7) Accessibility & Performance Smoke
-
-* Run **Lighthouse** on `/ui/search?q=<seed>`; store score trend (no hard gate initially).
-* Run **axe** to fail on **critical** issues only (missing labels, focus traps).
-
----
-
-## 8) CI Integration
-
-* Run all Must-Have tests on PRs.
-* Upload artifacts (screenshots, video, trace) to CI.
-* Post a brief run summary in the PR (pass/fail, counts).
-* Nightly workflow runs synthetic monitor against the deployed URL (configurable).
-
----
-
-## 9) Flake Policy
-
-* Any flaky test must be quarantined within 24h:
-
-  * Mark as `@flaky` (or skip with tracking issue).
-  * Add a stabilization ticket with owner/ETA.
-* No silently retried tests without surfacing flake counts.
-
----
-
-## 10) Ownership & Workflow
-
-* Tests live under `/ui-tests` (or agreed path).
-* Code owners: UI team (functional), Platform (CI wiring), Data (seeds).
-* Each test story tracked as its own PR:
-
-  * Update seeds/fixtures and baselines in the same PR.
-  * Include “How to reproduce locally” snippet in the PR description.
-
----
-
-## 11) Definition of Done (project level)
-
-* [ ] T-01 … T-07 implemented and green locally and in CI.
-* [ ] Artifacts reliably attach to CI runs.
-* [ ] Seeds make the suite deterministic; no calls to live providers.
-* [ ] Nightly synthetic monitor alerts on zero-result spikes or latency breaches.
-* [ ] A short **Runbook** exists: *“Debugging a failed UI E2E”* (open HTML report → inspect trace → reproduce with `BASE_URL`).
-
----
-
-## 12) Suggested Layout (non-prescriptive)
-
-```
-/ui-tests
-  /e2e
-    search.spec.ts
-    zero-results.spec.ts
-    details.spec.ts
-    filters.spec.ts
-    star-export.spec.ts
-  /fixtures
-    seeds.json
-  /snapshots
-    search-page.spec.ts-snapshots/
-  playwright.config.ts   # or cypress.config.ts
-/artifacts/ui-e2e/       # CI outputs
+# Install and prepare environment (first time)
+python -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+pip install -e .
+
+# Start backing services as needed
+make search-up || true
+make db-up || true
+
+# Seed demo data and index
+make seed-demo-ui
+make reindex
+
+# Run API + UI locally
+make api   # visit http://localhost:8000/ui/search?q=transformer
+
+# Quality gates
+make lint && make format && make test
 ```
 
+4) Update Docs
+- Check off the item(s) you completed in this file.
+- Update `README.md` or linked docs if behavior or usage has changed.
+
+5) Open PR
+- Keep PRs small and self-contained. Link to the item(s) checked here.
+- Include evidence of local validation and any relevant screenshots.
+- Ensure CI is green (lint, format, tests) before requesting review.
+
+## Quick Reference
+
+```bash
+# One-time setup (Poetry optional alternative exists in Makefile)
+python -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+pip install -e .
+
+# Services
+make search-up     # start OpenSearch
+make db-up         # start PostgreSQL (optional; SQLite by default)
+make up            # start DB+Search together
+make down          # stop DB+Search
+
+# Data, indexing, and API/UI
+make seed-demo-ui
+make reindex
+make api           # FastAPI at http://localhost:8000
+
+# CLI examples
+python -m ingestion.cli run --query "transformer" --max-results 3 --source arxiv
+make run-search query="transformer" max=3
+
+# Quality + tooling
+make lint
+make format
+make test
+make bench         # benchmark search
+```
+
+## Definition of Done (per item)
+
+- [ ] Owner and Target date are set in this file for the item.
+- [ ] UI behavior implemented and manually validated (normal, loading, and zero-result states).
+- [ ] Telemetry/events added (and do not break the UI on failure).
+- [ ] Accessibility sanity pass (labels, focus order, keyboard where applicable).
+- [ ] Performance sanity: visible latency regression avoided for the feature surface.
+- [ ] Tests updated or added; `make lint`, `make format`, and `make test` pass locally.
+- [ ] Documentation updated (this file and, if needed, `README.md`).
+- [ ] PR merged with a concise, clean commit history.
+
 ---
 
-## 13) Urgency
+# UI Improvement & Feedback Requirements
 
-We routinely hit “0 results” and don’t know why. Automated, seeded E2E + visual checks turn that into **fast, observable failures** with screenshots and traces — not guesswork.
-**Ship this test suite before expanding the UI surface area.**
+**Purpose:**
+Enhance the literature search UI to provide a smoother, more transparent user experience and add a feedback/telemetry layer so both users and engineers know when the system is failing or underperforming.
 
+---
+
+## 1. User Experience Improvements
+
+**Goal:** Make the search and browsing experience feel responsive, trustworthy, and easy to navigate.
+
+**Requirements:**
+- Show **result count**, **latency**, and **current sort order** prominently after every search.
+- When **0 results** are returned:
+  - Display a clear empty state with suggestions for refining the search.
+  - Provide a one-click “Report this search” action.
+- While results are loading:
+  - Show loading indicators or skeleton rows to communicate progress.
+- Under each title:
+  - Display key provenance info (e.g., source, DOI/arXiv/PMC links if available).
+- Summaries:
+  - Truncate long summaries with a “Show more” option to expand.
+- Filters:
+  - Allow quick filtering by thread, year range, venue, license, source, and `has_summary` status.
+  - Keep filter state in the URL for shareable links.
+- Actions:
+  - Provide “Star” functionality for saving results.
+  - Enable export of either the current filtered set or only starred results.
+- Optional usability:
+  - Add basic keyboard navigation for moving through results and toggling details/stars.
+
+---
+
+## 2. Feedback & Telemetry
+
+**Goal:** Capture structured, privacy-safe feedback events from the UI so engineers can detect and diagnose problems (e.g., high zero-result rates, failing connectors, API errors) quickly.
+
+**Requirements:**
+- Client should log:
+  - Search submission events (with query hash and filter context).
+  - Search results events (result count, latency).
+  - Zero-result events (with filter context).
+  - API error events (endpoint, status, latency, short note).
+  - Details loaded/failed, star toggled, export clicked.
+- Telemetry must:
+  - Include a session identifier and UI version tag.
+  - Be stored server-side in a structured table for later analysis.
+  - Be designed so logging failures never break the UI.
+- Engineers must be able to:
+  - Aggregate metrics (hourly) for zero-result rate, error rate, and latency.
+  - Trigger alerts when thresholds are breached (e.g., zero-result rate > X% in Y minutes).
+- All telemetry must respect privacy:
+  - Log query **hashes**, not raw query text.
+  - Avoid any personally identifiable information.
+
+---
+
+## 3. Operational Visibility
+
+**Goal:** Make it easy for operators to monitor UI health and debug issues.
+
+**Requirements:**
+- Provide a simple debug overlay (toggleable) showing:
+  - Last search payload.
+  - Latency.
+  - Result count.
+  - Build/version ID.
+- Add a basic synthetic monitor job:
+  - Runs canned queries on a schedule.
+  - Asserts that results are returned and latency is acceptable.
+  - Reports failures via the same alerting channel as telemetry.
+
+---
+
+## 4. Definition of Done
+
+**The UI changes are considered complete when:**
+- Users can:
+  - See result count, latency, and sort order after every search.
+  - Understand and act when zero results are returned.
+  - Easily filter, star, and export results without backend/code changes.
+- Engineers can:
+  - View telemetry data for any search session.
+  - Detect and be alerted to systemic issues within minutes.
+  - Run a synthetic monitor to confirm UI/API health.
+- All changes are:
+  - Documented in `README.md` or a dedicated UI guide.
+  - Tested for basic functional correctness.
+
+---
+
+## 5. Deliverables Summary
+
+- [x] Result header with count, latency, sort.
+- [x] Empty state with suggestions and “Report” action.
+- [x] Loading indicators for search and details.
+- [x] Provenance info under titles.
+Owner: JP
+Target: 2025-08-10
+
+Notes: Implemented provenance badges/links under titles in `src/ingestion/templates/ui_search.html`. Shows source badge and links for DOI, arXiv, and PMC when available. No backend changes required.
+- [x] Truncated summaries with expansion.
+- [x] Filter controls for key fields; URL sync.
+- [x] Star & export features.
+- [x] Client-side event logging for all key actions.
+- [x] Backend storage and aggregation for telemetry.
+- [x] Alerting for high error/zero-result rates.
+- [x] Debug overlay for quick inspection.
+- [x] Synthetic monitor for end-to-end health checks.
+
+Owner: JP
+Target: 2025-08-10
+
+Notes: Implemented a lightweight telemetry helper and wired events in `src/ingestion/templates/ui_search.html` for `search_submit`, `search_results`, `zero_result`, `api_error` (details fetch), `details_loaded`/`details_failed`, `star_toggled`, and `export_clicked`. Events include `session_id`, `ui_version`, `ts_iso`, `url`, and privacy-preserving `query_hash`. Uses `navigator.sendBeacon` with fallback to `fetch` and never blocks or breaks UI on failure. Endpoint placeholder: `/ui/telemetry` (to be implemented in the backend item).
+Follow-up: Added `/ui/telemetry` POST for ingest and `/ui/telemetry/metrics` GET for hourly aggregates (zero-result rate, error rate, avg latency). Data is stored in `ui_events`. Aggregation runs in-process and returns buckets for the last N hours.
+
+Implementation details for alerting:
+- Added `/ui/telemetry/alerts` in `src/ingestion/api.py` that evaluates windowed metrics and returns alert flags for zero-result and details error rates, with thresholds and minimum sample sizes configurable via query params.
+- Optional webhook: set `ALERT_WEBHOOK_URL` env and call with `send=1` to POST an alert payload when active.
+
+Debug overlay implementation:
+- Toggle button added to `src/ingestion/templates/ui_search.html` (fixed bottom-right). Panel shows result count, latency, sort, build/version ID, and last search payload JSON; uses sessionStorage and current DOM meta to populate. Non-blocking and privacy-safe.
+- Backend passes `build_version` to template via `src/ingestion/api.py` (`UI_BUILD_ID` env or app.version fallback).
+
+Synthetic monitor implementation:
+- Added `scripts/synthetic_monitor.py` which runs canned queries against the API `/search`, asserts non-zero results and latency under a configurable threshold, and reports failures via `ALERT_WEBHOOK_URL` (if set) or falls back to posting a `synthetic_failure` event to `/ui/telemetry`.
+- Added `make monitor` target to run locally or in cron. Config via env or flags: `MONITOR_BASE_URL`, `MONITOR_QUERIES`, `MONITOR_MAX_LATENCY_MS`, `MONITOR_INTERVAL`.

@@ -108,21 +108,23 @@
     </div>
   </div>
 
-  <div class="muted" id="result-meta" data-total="{{ total|default(0, true) }}" data-latency="{{ latency_ms|default('', true) }}" data-sort="{{ sort or '' }}">
-    <span><strong>{{ total|default(0, true) }}</strong> results</span>
-    {% if latency_ms is defined %}
-      · <span>Latency: {{ latency_ms }} ms</span>
-    {% endif %}
-    · <span>Sort: {{ sort }}</span>
-    {% if source or license or venue or year_start or year_end or has_summary %}
-      · <span>Filters:</span>
-      <span>
-        {% if source %}<span class="badge">source: {{ source }}</span>{% endif %}
-        {% if license %}<span class="badge">license: {{ license }}</span>{% endif %}
-        {% if venue %}<span class="badge">venue: {{ venue }}</span>{% endif %}
-        {% if year_start or year_end %}<span class="badge">year: {{ year_start or '…' }}–{{ year_end or '…' }}</span>{% endif %}
-        {% if has_summary %}<span class="badge">has summary</span>{% endif %}
-      </span>
+  <div class="muted" id="result-meta" data-total="{{ total if total is defined else '' }}" data-latency="{{ latency_ms if latency_ms is defined else '' }}" data-sort="{{ sort or '' }}">
+    {% if total is defined %}
+      <span><strong>{{ total }}</strong> results</span>
+      {% if latency_ms is defined %}
+        · <span>Latency: {{ latency_ms }} ms</span>
+      {% endif %}
+      · <span>Sort: {{ sort }}</span>
+      {% if source or license or venue or year_start or year_end or has_summary %}
+        · <span>Filters:</span>
+        <span>
+          {% if source %}<span class="badge">source: {{ source }}</span>{% endif %}
+          {% if license %}<span class="badge">license: {{ license }}</span>{% endif %}
+          {% if venue %}<span class="badge">venue: {{ venue }}</span>{% endif %}
+          {% if year_start or year_end %}<span class="badge">year: {{ year_start or '…' }}–{{ year_end or '…' }}</span>{% endif %}
+          {% if has_summary %}<span class="badge">has summary</span>{% endif %}
+        </span>
+      {% endif %}
     {% endif %}
   </div>
 
