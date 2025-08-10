@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 import time
 from contextlib import contextmanager
 from dataclasses import dataclass
@@ -85,7 +86,20 @@ def http_get_json(
     """
     if source_name and min_interval_seconds:
         global_rate_limiter.throttle(source_name, min_interval_seconds)
-    r = requests.get(url, params=params, timeout=timeout_seconds)
+    # Set polite defaults for providers (e.g., OpenAlex recommends mailto and UA)
+    effective_params: dict[str, Any] = dict(params or {})
+    headers: dict[str, str] = {
+        "Accept": "application/json",
+    }
+    contact_email = os.environ.get("OPENALEX_MAILTO") or os.environ.get("CONTACT_EMAIL")
+    user_agent = "literature-ingestion/0.2"
+    if contact_email:
+        user_agent = f"{user_agent} (+{contact_email})"
+    headers["User-Agent"] = user_agent
+    if "openalex.org" in url and contact_email and "mailto" not in effective_params:
+        effective_params["mailto"] = contact_email
+
+    r = requests.get(url, params=effective_params, headers=headers, timeout=timeout_seconds)
     r.raise_for_status()
     data = r.json() or {}
     if not isinstance(data, dict):

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Literature Search</title>
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; margin: 24px; }
+    h1 { font-size: 20px; margin-bottom: 12px; }
+    form { margin-bottom: 16px; }
+    input[type="text"] { width: 360px; padding: 6px 10px; }
+    table { border-collapse: collapse; width: 100%; }
+    th, td { padding: 8px 10px; border-bottom: 1px solid #eee; vertical-align: top; }
+    .badge { display: inline-block; padding: 2px 6px; border-radius: 4px; background: #eef; color: #334; font-size: 12px; }
+    .row-details { display: none; background: #fafafa; }
+    .summary { color: #222; }
+    .title { font-weight: 600; }
+    .muted { color: #666; font-size: 12px; }
+    button.expand { font-size: 12px; padding: 4px 6px; }
+    .sections { margin-top: 8px; }
+    .section { margin-bottom: 10px; }
+    .section h4 { margin: 0 0 4px; font-size: 13px; }
+    .section pre { margin: 0; white-space: pre-wrap; font-family: inherit; }
+  </style>
+</head>
+<body>
+  <h1>Literature Search</h1>
+  <form method="get" action="/ui/search">
+    <input type="text" name="q" value="{{ q }}" placeholder="Search papers..." />
+    <button type="submit">Search</button>
+  </form>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Year</th>
+        <th>Citations</th>
+        <th>License</th>
+        <th>Summary</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in items %}
+      <tr>
+        <td class="title">{{ item.title }}</td>
+        <td>{{ item.year or '' }}</td>
+        <td>{{ item.citation_count or 0 }}</td>
+        <td>
+          {% if item.license %}
+            <span class="badge">{{ item.license }}</span>
+          {% else %}
+            <span class="muted">n/a</span>
+          {% endif %}
+        </td>
+        <td class="summary">{{ item.summary or item.abstract or '' }}</td>
+        <td><button type="button" class="expand" data-id="{{ item.id }}">Details</button></td>
+      </tr>
+      <tr class="row-details" id="details-{{ item.id }}">
+        <td colspan="6">
+          <div class="sections" data-loaded="0">
+            <div class="muted">Loading sections...</div>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <script>
+    function renderSections(container, data) {
+      const wanted = ["Abstract", "Methods", "Results", "Conclusion"]; // display order
+      const sections = data.sections || {};
+      const frag = document.createDocumentFragment();
+      let count = 0;
+      for (const name of wanted) {
+        const text = sections[name];
+        if (!text) continue;
+        count += 1;
+        const wrap = document.createElement('div');
+        wrap.className = 'section';
+        const h = document.createElement('h4');
+        h.textContent = name;
+        const pre = document.createElement('pre');
+        pre.textContent = text;
+        wrap.appendChild(h);
+        wrap.appendChild(pre);
+        frag.appendChild(wrap);
+      }
+      container.innerHTML = '';
+      if (count === 0) {
+        const div = document.createElement('div');
+        div.className = 'muted';
+        div.textContent = 'No parsed sections available.';
+        container.appendChild(div);
+      } else {
+        container.appendChild(frag);
+      }
+      container.dataset.loaded = '1';
+    }
+
+    document.addEventListener('click', async (e) => {
+      const btn = e.target.closest('button.expand');
+      if (!btn) return;
+      const id = btn.dataset.id;
+      const row = document.getElementById(`details-${id}`);
+      const container = row.querySelector('.sections');
+      const isVisible = row.style.display === 'table-row';
+      if (isVisible) {
+        row.style.display = 'none';
+        return;
+      }
+      row.style.display = 'table-row';
+      if (container.dataset.loaded === '1') return;
+      try {
+        const resp = await fetch(`/paper/${id}`);
+        if (!resp.ok) throw new Error('request failed');
+        const data = await resp.json();
+        renderSections(container, data);
+      } catch (err) {
+        container.innerHTML = '<div class="muted">Failed to load sections.</div>';
+      }
+    });
+  </script>
+</body>
+</html>

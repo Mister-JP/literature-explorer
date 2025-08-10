@@ -18,12 +18,13 @@ requests = "^2.31.0"
 fastapi = "^0.111.0"
 uvicorn = {version = "^0.30.0", extras = ["standard"]}
 opensearch-py = "^2.6.0"
+urllib3 = "<2.2.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "^24.4.2"
 ruff = "^0.4.8"
 pytest = "^8.2.2"
-vcrpy = "^6.0.1"
+vcrpy = "^6.0.2"
 
 [tool.black]
 line-length = 100
@@ -41,5 +42,3 @@ ignore = ["E501"]
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
-
-

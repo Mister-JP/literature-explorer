@@ -35,6 +35,7 @@ def ensure_index(client: OpenSearch) -> None:
             "properties": {
                 "title": {"type": "text", "analyzer": "english"},
                 "abstract": {"type": "text", "analyzer": "english"},
+                "summary": {"type": "text", "analyzer": "english"},
                 "authors": {"type": "keyword"},
                 "year": {"type": "integer"},
                 "venue": {"type": "keyword"},
@@ -44,6 +45,7 @@ def ensure_index(client: OpenSearch) -> None:
                 "concepts": {"type": "keyword"},
                 "citation_count": {"type": "integer"},
                 "fetched_at": {"type": "date"},
+                "semantic_score": {"type": "float"},
             }
         },
     }
@@ -55,6 +57,7 @@ def upsert_document(client: OpenSearch, paper: Paper) -> None:
     doc = {
         "title": paper.title,
         "abstract": paper.abstract,
+        "summary": paper.summary,
         "authors": paper.authors.get("list", []) if paper.authors else [],
         "year": paper.year,
         "venue": paper.venue,

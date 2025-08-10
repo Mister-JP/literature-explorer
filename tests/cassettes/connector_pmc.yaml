@@ -1,0 +1,147 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - literature-ingestion/0.2
+    method: GET
+    uri: https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pmc&retmode=json&retmax=2&term=transformer
+  response:
+    body:
+      string: '{"header":{"type":"esearch","version":"0.3"},"esearchresult":{"count":"45279","retmax":"2","retstart":"0","idlist":["12335337","12334771"],"translationset":[],"translationstack":[{"term":"transformer[All
+        Fields]","field":"All Fields","count":"45598","explode":"N"},"GROUP"],"querytranslation":"transformer[All
+        Fields]"}}
+
+        '
+    headers:
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Expose-Headers:
+      - X-RateLimit-Limit,X-RateLimit-Remaining
+      Cache-Control:
+      - private
+      Connection:
+      - Keep-Alive
+      Content-Security-Policy:
+      - upgrade-insecure-requests
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Sun, 10 Aug 2025 14:51:50 GMT
+      Keep-Alive:
+      - timeout=4, max=40
+      NCBI-PHID:
+      - 1D3226C81E06228500003B9E6DB9B48D.1.1.m_1
+      NCBI-SID:
+      - A7AA8D377EFDB1D0_41FBSID
+      Referrer-Policy:
+      - origin-when-cross-origin
+      Server:
+      - Finatra
+      Set-Cookie:
+      - ncbi_sid=A7AA8D377EFDB1D0_41FBSID; domain=.nih.gov; path=/; expires=Mon, 10
+        Aug 2026 14:51:51 GMT
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Transfer-Encoding:
+      - chunked
+      X-RateLimit-Limit:
+      - '3'
+      X-RateLimit-Remaining:
+      - '2'
+      X-UA-Compatible:
+      - IE=Edge
+      X-XSS-Protection:
+      - 1; mode=block
+      # content-encoding removed to avoid double-decode issues in playback
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - literature-ingestion/0.2
+    method: GET
+    uri: https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=pmc&retmode=json&id=12335337%2C12334771
+  response:
+    body:
+      string: "{\"header\":{\"type\":\"esummary\",\"version\":\"0.3\"},\"result\":{\"uids\":[\"12335337\",\"12334771\"],\"12335337\":{\"uid\":\"12335337\",\"pubdate\":\"2025
+        Apr 9\",\"epubdate\":\"2025 Apr 9\",\"printpubdate\":\"2025 Sep\",\"source\":\"J
+        Magn Reson Imaging\",\"authors\":[{\"name\":\"Richard T\",\"authtype\":\"Author\"},{\"name\":\"de
+        Villedon de Naide V\",\"authtype\":\"Author\"},{\"name\":\"Nogues V\",\"authtype\":\"Author\"},{\"name\":\"G\xE9nisson
+        T\",\"authtype\":\"Author\"},{\"name\":\"Narceau K\",\"authtype\":\"Author\"},{\"name\":\"He
+        K\",\"authtype\":\"Author\"},{\"name\":\"Klaar R\",\"authtype\":\"Author\"},{\"name\":\"Durand
+        B\",\"authtype\":\"Author\"},{\"name\":\"Boull\xE9 T\",\"authtype\":\"Author\"},{\"name\":\"Poirot
+        G\",\"authtype\":\"Author\"},{\"name\":\"Sridi S\",\"authtype\":\"Author\"},{\"name\":\"Maes
+        J\",\"authtype\":\"Author\"},{\"name\":\"Constantin M\",\"authtype\":\"Author\"},{\"name\":\"Kneizeh
+        K\",\"authtype\":\"Author\"},{\"name\":\"Vlachos K\",\"authtype\":\"Author\"},{\"name\":\"Caluori
+        G\",\"authtype\":\"Author\"},{\"name\":\"Ja\xEFs P\",\"authtype\":\"Author\"},{\"name\":\"Stuber
+        M\",\"authtype\":\"Author\"},{\"name\":\"Cochet H\",\"authtype\":\"Author\"},{\"name\":\"Bustin
+        A\",\"authtype\":\"Author\"}],\"title\":\"Improved and Automated Detection
+        of Papillary Muscle Infarction Using Joint Bright\u2010 and Black\u2010Blood
+        Late Gadolinium Enhancement MRI\",\"volume\":\"62\",\"issue\":\"3\",\"pages\":\"827-839\",\"articleids\":[{\"idtype\":\"pmid\",\"value\":\"40202270\"},{\"idtype\":\"doi\",\"value\":\"10.1002/jmri.29777\"},{\"idtype\":\"pmcid\",\"value\":\"PMC12335337\"}],\"fulljournalname\":\"Journal
+        of Magnetic Resonance Imaging\",\"sortdate\":\"2025/04/09 00:00\",\"pmclivedate\":\"2025/08/10\"},\"12334771\":{\"uid\":\"12334771\",\"pubdate\":\"2025
+        Aug 8\",\"epubdate\":\"2025 Aug 8\",\"printpubdate\":\"\",\"source\":\"Sci
+        Rep\",\"authors\":[{\"name\":\"Lee B\",\"authtype\":\"Author\"},{\"name\":\"Song
+        HJ\",\"authtype\":\"Author\"},{\"name\":\"Park YJ\",\"authtype\":\"Author\"},{\"name\":\"Kang
+        BO\",\"authtype\":\"Author\"}],\"title\":\"Multimodal Alzheimer\u2019s disease
+        recognition from image, text and audio\",\"volume\":\"15\",\"issue\":\"\",\"pages\":\"29038\",\"articleids\":[{\"idtype\":\"pmid\",\"value\":\"0\"},{\"idtype\":\"doi\",\"value\":\"10.1038/s41598-025-14998-7\"},{\"idtype\":\"pmcid\",\"value\":\"PMC12334771\"}],\"fulljournalname\":\"Scientific
+        Reports\",\"sortdate\":\"2025/08/08 00:00\",\"pmclivedate\":\"2025/08/09\"}}}\n"
+    headers:
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Expose-Headers:
+      - X-RateLimit-Limit,X-RateLimit-Remaining
+      Cache-Control:
+      - private
+      Connection:
+      - Keep-Alive
+      Content-Security-Policy:
+      - upgrade-insecure-requests
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Sun, 10 Aug 2025 14:51:51 GMT
+      Keep-Alive:
+      - timeout=4, max=40
+      NCBI-PHID:
+      - 1D33375998DD51F500002BA7EF97D2D7.1.1.m_1
+      NCBI-SID:
+      - 4622ECA3290FA847_36D5SID
+      Referrer-Policy:
+      - origin-when-cross-origin
+      Server:
+      - Finatra
+      Set-Cookie:
+      - ncbi_sid=4622ECA3290FA847_36D5SID; domain=.nih.gov; path=/; expires=Mon, 10
+        Aug 2026 14:51:52 GMT
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Transfer-Encoding:
+      - chunked
+      X-RateLimit-Limit:
+      - '3'
+      X-RateLimit-Remaining:
+      - '1'
+      X-UA-Compatible:
+      - IE=Edge
+      X-XSS-Protection:
+      - 1; mode=block
+      # content-encoding removed to avoid double-decode issues in playback
+    status:
+      code: 200
+      message: OK
+version: 1

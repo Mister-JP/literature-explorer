@@ -1,0 +1,412 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - literature-ingestion/0.2
+    method: GET
+    uri: https://api.core.ac.uk/v3/search/works?q=transformer&limit=2&apiKey=m6wGMWAbg1ofdQu7SzIXx8vVj2OeaHkC
+  response:
+    body:
+      string: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\"
+        />\n        <meta http-equiv=\"refresh\" content=\"0;url='https://api.core.ac.uk/v3/search/works/?q=transformer&amp;limit=2&amp;apiKey=m6wGMWAbg1ofdQu7SzIXx8vVj2OeaHkC'\"
+        />\n\n        <title>Redirecting to https://api.core.ac.uk/v3/search/works/?q=transformer&amp;limit=2&amp;apiKey=m6wGMWAbg1ofdQu7SzIXx8vVj2OeaHkC</title>\n
+        \   </head>\n    <body>\n        Redirecting to <a href=\"https://api.core.ac.uk/v3/search/works/?q=transformer&amp;limit=2&amp;apiKey=m6wGMWAbg1ofdQu7SzIXx8vVj2OeaHkC\">https://api.core.ac.uk/v3/search/works/?q=transformer&amp;limit=2&amp;apiKey=m6wGMWAbg1ofdQu7SzIXx8vVj2OeaHkC</a>.\n
+        \   </body>\n</html>"
+    headers:
+      CF-RAY:
+      - 96d058d8ff01061b-IAD
+      Cf-Cache-Status:
+      - DYNAMIC
+      Connection:
+      - keep-alive
+      Content-Type:
+      - text/html; charset=UTF-8
+      Date:
+      - Sun, 10 Aug 2025 14:57:41 GMT
+      Location:
+      - https://api.core.ac.uk/v3/search/works/?q=transformer&limit=2&apiKey=m6wGMWAbg1ofdQu7SzIXx8vVj2OeaHkC
+      Nel:
+      - '{"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}'
+      Report-To:
+      - '{"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=Ag0p%2Fdz7m9s2r8rXuaxuTEpKEhpBZWAzsTDed0bo5s9mlcNANUF1WUFnvHg28S74dLP9VTWOXx%2Bv1OE%2FLSRMJ3%2FQDPp%2BY6935QpO6YmTusIcNWAjpAaMtJdK"}]}'
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+      X-Frame-Options:
+      - SAMEORIGIN, SAMEORIGIN
+      X-Ratelimit-Limit:
+      - '10'
+      X-Ratelimit-Remaining:
+      - '9'
+      X-Ratelimit-Retry-After:
+      - 2025-08-10T14:57:41+0000
+      alt-svc:
+      - h3=":443"; ma=86400
+    status:
+      code: 301
+      message: Moved Permanently
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - literature-ingestion/0.2
+    method: GET
+    uri: https://api.core.ac.uk/v3/search/works/?q=transformer&limit=2&apiKey=m6wGMWAbg1ofdQu7SzIXx8vVj2OeaHkC
+  response:
+    body:
+      string: '{"totalHits":397854,"limit":2,"offset":0,"results":[{"acceptedDate":"","arxivId":null,"authors":[{"name":"Delgado
+        Restituto, Manuel"},{"name":"Masuch, Jens"},{"name":"Rodr\u00edguez V\u00e1zquez,
+        \u00c1ngel Benito"}],"citationCount":0,"contributors":["Universidad de Sevilla.
+        Departamento de Electr\u00f3nica y Electromagnetismo"],"outputs":["https:\/\/api.core.ac.uk\/v3\/outputs\/286563635"],"createdDate":"2020-01-29T21:21:02","dataProviders":[{"id":1582,"name":"","url":"https:\/\/api.core.ac.uk\/v3\/data-providers\/1582","logo":"https:\/\/api.core.ac.uk\/data-providers\/1582\/logo"}],"depositedDate":"","abstract":"A
+        low power transceiver architecture for the 2.4 GHz ISM band using a 1.0 V
+        supply is presented. It employs a transformer to convert the 100 \u03a9 antenna
+        impedance to almost 1 k\u03a9 and so facilitates a low power transmitter and
+        receiver. The simulated post-layout output power of the differential class-E
+        power amplifier is 2.0 dBm with a drain efficiency of 28.4%. The direct-conversion
+        receiver achieves a very low power consumption of 420 \u03bcW and a noise
+        figure of 15.0 dB.Ministerio de Ciencia e Innovaci\u00f3n TEC2009-08447Junta
+        de Andaluc\u00eda TIC-0281","documentType":"research","doi":"10.1109\/apccas.2010.5774893","downloadUrl":"https:\/\/core.ac.uk\/download\/286563635.pdf","fieldOfStudy":null,"fullText":"2010
+        Asia Pacific Conference on Circuits and Systems (APCCAS 2010)6 - 9 December
+        2010, Kuala Lumpur, MalaysiaTransformer based front-end for a low power2.4
+        GHz transceiverJens Masuch, Manuel Delgado-Restituto and A\u00b4ngel Rodr\u0131\u00b4guez-Va\u00b4zquezInstitute
+        of Microelectronics of Seville (IMSE-CNM-CSIC) - University of SevilleEmail:
+        {masuch,mandel,angel}@imse-cnm.csic.esAbstract\u2014A low power transceiver
+        architecture for the2.4 GHz ISM band using a 1.0 V supply is presented. It
+        employs atransformer to convert the 100 \u2126 antenna impedance to almost1
+        k\u2126 and so facilitates a low power transmitter and receiver.The simulated
+        post-layout output power of the differential class-Epower amplifier is 2.0
+        dBm with a drain efficiency of 28.4%. Thedirect-conversion receiver achieves
+        a very low power consumptionof 420 \u00b5W and a noise figure of 15.0 dB.I.
+        INTRODUCTIONBody area networks (BAN) using miniature sensors areexpected to
+        allow for a lot of new applications of wirelesscommunication. They range from
+        entertainment and automa-tion to health care or human interface devices. In
+        many of theseapplications, the need for ultra-low power consumption isprioritary
+        since network nodes are supplied by small batteriesor even rely on autonoumus
+        energy scavenging techniques.Facilitating this trend, the Bluetooth SIG has
+        recently pub-lished a low energy extension that allows short range commu-nication
+        with very low power consumption [1]. Bluetooth lowenergy also operates in
+        the 2.4 GHz ISM band but with fewerchannels at an increased spacing of 2 MHz.
+        The modulationtype is frequency shift keying (FSK) with a data rate of1 Mbps
+        and a modulation index of 0.5\u00b110%. The standarddemands for receiver sensitivity
+        of -70 dBm or better. Thistranslates into a tolerable noise figure (NF) of
+        24 dB assuminga bandwidth of 1 MHz and a signal-to-noise ratio (SNR) of20
+        dB.This paper presents a transceiver architecture intended forthe new standard.
+        In section II the transceiver architecture ispresented while section III describes
+        the circuit level imple-mentation of the blocks. Finally, simulation results
+        are givenin section IV.II. ARCHITECTUREIn order to increase the battery life
+        time of the sensor nodethe power consumption of the transceiver must be reducedas
+        much as possible. As a consequence the direct conversionarchitecture is often
+        used for this kind of short-range wirelessapplications [2]\u2013[4]. There
+        is just one step of frequencyconversion and so there are few blocks working
+        at the radiofrequency.The block diagram of the proposed low power transceiveris
+        shown in Fig. 1. The low requirements on the noiseperformance imposed by the
+        Bluetooth low energy standardallow to use a passive receiving path. Signal
+        amplification isPassive mixer PA 0\u00b090\u00b0BBoutIBBoutQTx-dataLOQLOIQVCOFig.
+        1. Block diagram of the proposed transceivershifted completely into the baseband
+        where it can be realizedwith less power consumption. The noise figure of this
+        approachis defined by the losses in the passive down-conversion andthe noise
+        performance of the baseband amplifier.A quadrature voltage controlled oscillator
+        (QVCO) gener-ates the I and Q phases of the carrier frequency and directlydrives
+        the switches of the passive mixer. In this setup thecapacitive load of the
+        mixer is tuned out by the inductor ofthe LC-QVCO [4], [5].The transmitting
+        path is also reduced to the minimum num-ber of blocks. The FSK modulation
+        defined by the Bluetoothlow energy standard allows direct modulation of the
+        VCO.The required frequency deviation of \u00b1225 . . . 275 kHz canbe realized
+        using small-sized PMOS transistors as varactors[6]. Direct modulation of the
+        QVCO makes an up-conversionmixer unnecessary and the constant envelope transmit
+        signalallows an efficient nonlinear power amplifier.Switching type class-E
+        power amplifiers are known fortheir very good efficiency. Losses are minimized
+        because thecurrent peaks in the switching transistor occur when the drain-source
+        voltage is almost zero. Moreover, class-E configurationachieves high efficiency
+        because the drain voltage can ideallyrise up to 3.56 times the supply voltage
+        [7]. However, in orderto operate the power amplifier in class-E mode for low
+        outputpower levels of about 0 dBm the load resistance seen by thePA must be
+        approximately 1 k\u2126. Therefore, a transformer isused to boost the antenna
+        impedance. The transformer alsoprovides single-ended to differential conversion
+        if a single-ended antenna is used. Differential PAs generate smallercurrent
+        peaks on the supply line than single-ended PAs, andsuch peaks appear at twice
+        the operating frequency. Thisfacilitates the decoupling of the PA from the
+        remainder of978-1-4244-7456-1\/10\/$26.00 \u00a92010 IEEE 2882010 Asia Pacific
+        Conference on Circuits and Systems (APCCAS 2010)6 - 9 December 2010, Kuala
+        Lumpur, MalaysiaTABLE ITRANSFORMER PARAMTERSParameter PA\/mixer coil antenna
+        coilNumber of turns 6 2Windings in parallel 1 2Serial inductance 11.6 nH 1.56
+        nHSerial resistance 18.0 \u2126 3.2 \u2126Coupling factor 0.85Area 0.116 mm2
+        (340\u00b5m x 340\u00b5m)the circuit.The impedance conversion of the transformer
+        is also benefi-cial for the receiver design because it provides passive voltagegain
+        and the switches of the passive mixer can have a higheron-resistance.III.
+        IMPLEMENTATIONThe transceiver front-end has been designed in a 130 nmRF CMOS
+        process using 6 metal layers (1 thick top metal)and MIM capacitors. The supply
+        voltage is set to 1.0 V.A. TransformerImpedance transformation is achieved
+        using a step-up trans-former with a 2-turn coil at the antenna port and a
+        6-turn coilat the internal port In order to minimize the insertion lossthe
+        coupling factor k between the coils has to be maximized[8]. Therefore, the
+        coil connected to the antenna consists oftwo parallel windings of two turns
+        each. This also reduces theserial resistance in this coil. On the internally
+        connected coil ahigh inductance is needed to support the high impedance levelon
+        this port. The transformer is drawn as a planar structureusing the thick top
+        metal layer 6 and the thin metal layer 5 ofthe process.Characterization of
+        the electrical behavior has been withthe 2.5-D electromagnetic solver Momentum.
+        The resulting s-parameter set was then fitted to a direct form model of thetransformer
+        [8] with the most important parameters presentedin Table I.B. QVCO with direct
+        modulationThe QVCO is based on a previous work [9] using parallelcoupling.
+        Thanks to the high differential inductance of 10.2 nHin each tank it achieves
+        an amplitude of 0.2 V at the fouroutput I\/Q phases with a very low current
+        consumption ofapproximately 350 \u00b5A.During transmission mode only the
+        in-phase component ofthe carrier is needed and therefore one core of the QVCO
+        isdeactivated. In this mode the QVCO is also used to directlygenerate the
+        FSK modulation of the carrier. The high tankinductance leads to a differential
+        capacitance of only 170 aFthat has to be switched. Such a small switchable
+        capacitancecan be implemented using almost minimum sized PMOStransistors as
+        varactors with digital control voltage [6].In order to obtain a positive and
+        negative frequency devia-tion from the carrier simply two differential varactors
+        are usedvminusmod[0]mod[1]vplusFig. 2. PMOS varactor pair used for direct
+        modulation of the VCORFINLOITx-enableantennaoff-chipon-chipRx-enable4 parallel
+        PA stagesTx\/Rx switchM1 M2M3 M4M5M6C1CCCCESD ESDFig. 3. Tx\/Rx switch with
+        class-E power amplifierin parallel (Fig 2). Setting both modulation inputs
+        (mod[0:1])to VDD leads to the higher differential capacitance and henceto
+        a negative frequency deviation. On the other hand, settingboth inputs to ground
+        results in a positive frequency shift. Theintermediate state with one input
+        at ground and one at VDD isneeded to tune the VCO to the center frequency
+        within a phaselocked loop (PLL). During transmission the PLL is opened toallow
+        direct modulation of the VCO.The accuracy of the frequency shift heavily depends
+        on theprocess variation, i.e. the offset frequency varies as much as\u00b125%.
+        Therefore, an array of 5 differential varactor pairs hasto be added to the
+        LC tank in order to select the pair with thedesired frequency shift by calibration.
+        Within the industrialtemperature range of -40\u00b0C. . . 85\u00b0C the variation
+        fortunatelyis much smaller (\u2248 \u00b12%) so that no further calibration
+        versustemperature is needed.C. Power amplifierThe proposed differential power
+        amplifier is shown in Fig. 3together with the Tx\/Rx-switch. The thin oxide
+        output tran-sistor M1 and M2 are driven by inverters and thus operate asswitches.
+        If all parallel stages are actived the power amplifierworks in class-E mode
+        and achieves its peak efficiency andhighest output power level. The concept
+        of 4 stages in parallelhas the advantage that for a reduced output power setting
+        alsothe power consumption in the drivers is reduced.The Tx\/Rx switch uses
+        thick oxide transistors in order towithstand the class-E voltage waveforms
+        of up to 2.4 V at2892010 Asia Pacific Conference on Circuits and Systems (APCCAS
+        2010)6 - 9 December 2010, Kuala Lumpur, MalaysiaLOI\/QRFINmixeroutputCfbRfbCfbRfb-++-CLPBBoutI\/QFig.
+        4. Passive current-driven mixer with baseband transimpedance amplifiertheir
+        drains. Also in case of an ESD event the voltage at thispoints can rise up
+        to three times higher than at the antennainput due to the impedance conversion
+        of the transformer.D. ReceiverIn a direct-conversion receiver the low frequency
+        1\/f noise isof special concern because the down-converted signal appearsaround
+        DC. Since the noise density is proportional to the DCcurrent a passive mixer
+        with zero bias current achieves verygood noise performance and a low 1\/f
+        corner frequency [10].Therefore, a passive current driven mixer as shown in
+        Fig. 4is used in the receiver.The noise performance of the passive mixer itself
+        is ba-sically defined by its conversion gain. Due to its passivebehavior the
+        conversion gain is always negative and directlyincreases the noise figure
+        of the receiver. The conversion gainis improved if the transistors work as
+        switches with a low on-resistance. This can be achieved by using wide transistors
+        withlarge over drive voltage. However, larger overdrive voltageleads to an
+        increased power consumption in the driving QVCOor even requires a buffering
+        stage. Low on-resistance can alsobe achieved using wide transistors leading
+        to an increasedparasitic coupling capacitance from the mixer input to theQVCO.
+        This would make the QVCO more susceptible tofrequency pulling at high RF input
+        levels. Therefore, in orderto limit power consumption and VCO pulling the
+        implementedpassive mixer is driven by a low amplitude of 0.2 V and usesrelatively
+        small transistors.The output of the passive mixer is loaded by the basebandtransimpedance
+        amplifier and by a MIM-capacitor (CLP =20pF ) to remove the RF components.
+        The amplifier presentsa low impedance load (\u2248 500k\u2126) to the mixer
+        and convertsthe input current to an output voltage with a gain of Rfb =15k\u2126.
+        Parallel feedback capacitors Cfb form together withthe freedback resistors
+        Rfb the channel filter with a low passcorner frequency of 650 kHz.The operational
+        amplifier contains a differential PMOS pairfor amplification followed by a
+        buffering stage to drive the loadwhich is mainly formed by the feedback network.
+        Each stageworks with a bias current of approximately 100 \u00b5A resulting
+        ina total current consumption of 210 \u00b5A per baseband amplifierincluding
+        biasing and common mode feedback. The commonmode voltage at the input and
+        output of the baseband amplifierFig. 5. Layout of the transceiver frontend
+        test chip (die size 1.4 x 1.1 mm)TABLE IISIMULATED POST-LAYOUT PERFORMANCE
+        OF THE POWER AMPLIFIERParameter ValueSupply voltage 1.0 Vnumber of active
+        stages 1 2 4DC supply current incl. driver 2.5 mA 4.3 mA 6.2 mAPA drain efficiency
+        16.0% 24.8% 28.4%Output power (fundamental tone) -4.2 dBm -0.1 dBm 2.0 dBmis
+        set to 0.2 V in order to allow sufficient overdrive voltagein the Rx-switches
+        (M5, M6 in Fig. 3).IV. SIMULATION RESULTSThe complete frontend was simulated
+        with a differential100 \u2126 antenna including parasitics extracted from
+        the layout(Fig. 5) using the SpectreRF simulator. ESD structures and aQFN36
+        package model have also been included in the simula-tion to account for losses
+        in the antenna IOs. At the basebandoutputs the amplifiers are loaded by 100
+        fF capacitors toaccount for the load imposed by subsequent stages.The simulated
+        power amplifier performance is summarizedin Table II. It shows a peak drain
+        efficiency at the highest out-put level setting of 28.4%. Including the power
+        consumptionof the QVCO with all its biasing current steered to one of thetwo
+        cores, the overall efficiency of the transmitter is expectedto be 24.1%.The
+        spectrum of the differential baseband output voltageis shown in Fig. 6 at
+        an input level of -70 dBm. Thisinput level coincides with the required sensitivity
+        stated in100 1k 10k 100k 1M 10M 100M\u2212110\u2212100\u221290\u221280\u221270\u221260\u221250offset
+        from LO frequency [Hz]differential voltage at BBoutI\/Q [dBV]Fig. 6. Differential
+        baseband output voltage at an input power of -70 dBm2902010 Asia Pacific Conference
+        on Circuits and Systems (APCCAS 2010)6 - 9 December 2010, Kuala Lumpur, Malaysia100
+        1k 10k 100k 1M 10M 100M10152025303540offset from LO frequency [Hz]double\u2212sideband
+        Noise Figure [dB]Fig. 7. Noise Performance of the receiverthe Bluetooth low
+        energy standard. It leads to a signal-to-noise ratio (SNR) of 26.2 dB in each
+        baseband channel andtherefore leaves plenty of margin for the FSK demodulator.The
+        overall noise figure is plotted in Fig. 7. Below the 1\/fcorner frequency
+        of 20 kHz the baseband amplifier dominatesthe noise performance while at higher
+        frequencies both thepassive mixer and the baseband amplifier equally contributeto
+        the total noise.Fig 8 shows the simulation of the receiver linearity athigh
+        input levels excluding the baseband amplifier. The inputreferred 1-dB compression
+        point and 3rd order intercept pointare -15.3 dBm and -5.7 dBm respectively.
+        Therefore, the RFsignal has to be attenuated to reach the Bluetooth specificationof
+        -10 dBm as the maximum input signal power. Such aattenuation can be simply
+        implemented by a transistor by-passing a portion of the current at the input
+        of the mixer. Thereceiver performance is summarized in Table III.\u221240
+        \u221235 \u221230 \u221225 \u221220 \u221215 \u221210 \u22125 0\u221255\u221250\u221245\u221240\u221235\u221230\u221225\u221220input
+        power at antenna port [dBm]mixer output power [dBm]  single\u2212tone 1st
+        order output1dB\/dB tangent1dB compression point(a)\u221240 \u221235 \u221230
+        \u221225 \u221220 \u221215 \u221210 \u22125 0\u2212120\u2212100\u221280\u221260\u221240\u2212200input
+        power at antenna port [dBm]mixer output power [dBm]  two\u2212tone 1st order
+        outputtwo\u2212tone 3rd order output1dB\/dB tangent3dB\/dB tangent3rd order
+        intercept point(b)Fig. 8. Linearity of the receiver (without baseband amplifier):
+        (a) 1dBcompression point, (b) 3rd order intercept pointTABLE IIISIMULATED
+        POST-LAYOUT PERFORMANCE OF THERECEIVERParameter ValueSupply voltage 1.0 VRX
+        current consumption 420 \u00b5APassive conversion gain -13.9 dBBaseband voltage
+        gain 32.6 dBintegrated Noise Figure 15.0 dB(10. . . 500kHz)1dB compression
+        point (input referred)* -15.3 dBm3rd order intercept point (input referred)*
+        -5.7 dBm* without baseband amplifierV. CONCLUSIONSA low-power transceiver
+        architecture has been presentedthat is capable of conforming the Bluetooth
+        low energy spec-ification. The antenna impedance is up-converted by a trans-former
+        which allows the design of an efficient class-E poweramplifier for low output
+        power levels and a supply of 1.0 V.In the receiver the power consumpton has
+        been minimized asmuch as possible while sacrifycing noise performance. Stillthe
+        performance is sufficient for wireless sensor networks orbody area networks.ACKNOWLEDGEMENTSThis
+        work has been supported by the Spanish Ministryof Science \u0026 Innovation
+        under grant TEC2009-08447, theJunta de Andaluc\u0131\u00b4a under grant TIC-02818
+        and the 2007-2013FEDER Programme.REFERENCES[1] Bluetooth Specification, Volume
+        6 (Low Energy Controller), BluetoothSIG Std., Rev. 4.0, Dec 2009.[2] S. Hae-Moon
+        et al., \u201cA Low Power Fully CMOS Integrated RFTransceiver IC for Wireless
+        Sensor Networks,\u201d Very Large Scale In-tegration (VLSI) Systems, IEEE
+        Transactions on, vol. 15, no. 2, pp.227\u2013231, 2007.[3] A. C. W. Wong et
+        al., \u201cA 1 V Wireless Transceiver for an Ultra-Low-Power SoC for Biotelemetry
+        Applications,\u201d Solid-State Circuits, IEEEJournal of, vol. 43, no. 7,
+        pp. 1511\u20131521, 2008.[4] C. Bernier et al., \u201cAn ultra low power 130nm
+        CMOS direct conversiontransceiver for IEEE802.15.4,\u201d in Radio Frequency
+        Integrated CircuitsSymposium, 2008. RFIC 2008. IEEE, 2008, pp. 273\u2013276.[5]
+        B. W. Cook, A. Berny, A. Molnar, S. Lanzisera, and K. S. J. Pister,\u201cLow-Power
+        2.4-GHz Transceiver With Passive RX Front-End and 400-mV Supply,\u201d Solid-State
+        Circuits, IEEE Journal of, vol. 41, no. 12, pp.2757\u20132766, 2006.[6] R.
+        B. Staszewski, H. Chih-Ming, D. Leipold, and P. T. Balsara, \u201cA firstmultigigahertz
+        digitally controlled oscillator for wireless applications,\u201dMicrowave
+        Theory and Techniques, IEEE Transactions on, vol. 51,no. 11, pp. 2154\u20132164,
+        2003.[7] P. Reynaert and M. Steyaert, RF Power Amplifiers for Mobile Commu-nications.
+        Dordrecht, The Netherlands: Springer, 2006.[8] J. R. Long, \u201cMonolithic
+        transformers for silicon RF IC design,\u201d Solid-State Circuits, IEEE Journal
+        of, vol. 35, no. 9, pp. 1368\u20131382, 2000.[9] J. Masuch and M. Delgado-Restituto,
+        \u201cLow power 2.4 GHz quadraturegeneration for Body Area Network applications,\u201d
+        in Circuits and Sys-tems, 2010. ISCAS 2010. IEEE International Symposium on,
+        2010, pp.493\u2013496.[10] E. Sacchi et al., \u201cA 15 mW, 70 kHz 1\/f corner
+        direct conversion CMOSreceiver,\u201d in Custom Integrated Circuits Conference,
+        2003. Proceedingsof the IEEE 2003, 2003, pp. 459\u2013462.291","id":67792253,"identifiers":[{"identifier":"oai:idus.us.es:11441\/90778","type":"OAI_ID"},{"identifier":"286563635","type":"CORE_ID"},{"identifier":"10.1109\/apccas.2010.5774893","type":"DOI"}],"title":"Transformer
+        based front-end for a low power 2.4 GHz transceiver","language":{"code":"en","name":"English"},"magId":null,"oaiIds":["oai:idus.us.es:11441\/90778"],"publishedDate":"2010-01-01T00:00:00","publisher":"\u0027Institute
+        of Electrical and Electronics Engineers (IEEE)\u0027","pubmedId":null,"references":[],"sourceFulltextUrls":["https:\/\/idus.us.es\/bitstream\/11441\/90778\/1\/Transformer%20based%20front-end.pdf"],"updatedDate":"2022-05-19T21:09:41","yearPublished":2010,"journals":[],"links":[{"type":"download","url":"https:\/\/core.ac.uk\/download\/286563635.pdf"},{"type":"reader","url":"https:\/\/core.ac.uk\/reader\/286563635"},{"type":"thumbnail_m","url":"https:\/\/core.ac.uk\/image\/286563635\/large"},{"type":"thumbnail_l","url":"https:\/\/core.ac.uk\/image\/286563635\/large"},{"type":"display","url":"https:\/\/core.ac.uk\/works\/67792253"}]},{"acceptedDate":"","arxivId":null,"authors":[{"name":"De
+        Parry, T."}],"citationCount":0,"contributors":[],"outputs":["https:\/\/api.core.ac.uk\/v3\/outputs\/10255194"],"createdDate":"2013-05-31T10:42:06","dataProviders":[{"id":151,"name":"","url":"https:\/\/api.core.ac.uk\/v3\/data-providers\/151","logo":"https:\/\/api.core.ac.uk\/data-providers\/151\/logo"}],"depositedDate":"","abstract":"Center-tap
+        push-pull transformer with toroidal core helically wound with a single coaxial
+        cable creates a high frequency wideband transformer. This transformer has
+        a high-turn ratio, a high coupling coefficient, and a flat broadband response","documentType":"research","doi":null,"downloadUrl":"https:\/\/core.ac.uk\/download\/pdf\/10255194.pdf","fieldOfStudy":null,"fullText":"\tDecember
+        1966\n\t\nBrief 66-10600 \n\t\n..\n\t\nAEC-NASA TECH BRIEF \nAEC-NASA Tech
+        Briefs describe innovations resulting from the research and development program
+        \nof the U.S. AEC or from AEC-NASA interagency efforts. They are issued to
+        encourage commercial \napplication. Tech Briefs are published by NASA and
+        may be purchased, at 15 cents each, from \nthe Clearinghouse for Federal Scientific
+        and Technical Information, Springfield, Virginia 22151. \nHigh Frequency Wide-Band
+        Transformer Uses Coax to\n\r\nAchieve High Turn Ratio and Flat Response \nThe
+        problem: \nTo design a high frequency wide-band transformer \nwith a high
+        turn ratio, a high coupling coefficient, and \na flat broadband response.
+        It is difficult to obtain ef-\nficient coupling in standard high frequency
+        trans-\nformers with turn ratios above 2:1. Also, flat broad-\nband frequency
+        response is not readily available in \ntransformers with very high turn ratios.\nThe
+        solution: \nA toroidal core is spirally wound with a single \ncoaxial cable.
+        The inner conductor of the coaxial \ncable functions as the primary winding
+        and the outer \ncoax shielding is segmented to form the secondary \nwinding.
+        \nHow it\u0027s done: \nA center-tap push-pull transformer configuration \nis
+        shown which consists of a helical winding of coaxial \n(continued overleaf)
+        \nThis document was prepared under the sponsorship of the Atomic liability
+        resulting from the use of the information contained in this \nEnergy Commission
+        and\/or the National Aeronautics and Space document, or warrants that the
+        use of any information, apparatus, \nAdministration. Neither the United States
+        Government nor any per- method, or process disclosed in this document may
+        not infringe pri-\nson acting on behalf of the United States Government assumes
+        any vately owned rights.\nhttps:\/\/ntrs.nasa.gov\/search.jsp?R=19660000598
+        2020-03-11T17:45:11+00:00Z\ncable on a ring of ferrite core material. The
+        ferrite \ninner conductor, with input terminals I and 2, cor-\nresponds to
+        the primary winding. The outer shielding, \nwith output terminals 3 and 4,
+        corresponds to the \nsecondary winding. \nThe cable is initially wound on
+        the core at a 1:1 \nratio. The method used to obtain a 4:1 stepdown ratio
+        \nis illustrated. For each half of the transformer I and II \nthere are effectively
+        four primary windings magneti-\ncally coupled to one secondary winding. The
+        effect of \nreducing the number of turns in the secondary is \naccomplished
+        by sectionally discontinuing the outer \nshielding and rewiring the resulting
+        sections into \nfour parallel networks. Thus, the secondary is elec-\ntrically
+        equivalent to a single turn of a conductor \nabout a magnetic core wound with
+        four primary turns. \nNotes: \nI. Specific performance. data of this design
+        indicate \nthat the coupling coefficient between primary and \nsecondary approaches
+        1. Stray inductance loss is \nlowered by this configuration. The amount of
+        \ncoupling and\/or stray inductance loss may be \nvaried as a function of
+        the diameters of the two \nconductors.\n2. Empirical study of the frequency
+        response of this \ntransformer indicates a completely flat response \nfrom
+        100 Kc to 10 Mc. \n3. The networks in parallel need not be single turn as
+        \nillustrated, but may be any number as required to \nmeet specific requirements.
+        \n4. Inquiries concerning this innovation may be di-\nrected to:\nOffice of
+        Industrial Cooperation \nArgonne National Laboratory \n9700 South Cass Avenue
+        \nArgonne, Illinois 60439 \nReference: B66-10600\nSource: T.De Parry \nParticle
+        Accelerator Division \n(ARG- 107) \nPatent status: \nInquiries about obtaining,
+        rights for commercial \nuse of this innovation may be made to: \nMr. George
+        H. Lee, Chief \nChicago Patent Group \nU.S. Atomic Energy Commission \nChicago
+        Operations Office \n9800 South Cass Avenue \nArgonne, Illinois 60439 \nBrief
+        66-10600\t Category 01\n","id":4465293,"identifiers":[{"identifier":"oai:casi.ntrs.nasa.gov:19660000598","type":"OAI_ID"},{"identifier":"10255194","type":"CORE_ID"}],"title":"High
+        frequency wide-band transformer uses coax to achieve high turn ratio and flat
+        response","language":{"code":"en","name":"English"},"magId":null,"oaiIds":["oai:casi.ntrs.nasa.gov:19660000598"],"publishedDate":"1966-12-01T00:00:00","publisher":"","pubmedId":null,"references":[],"sourceFulltextUrls":["http:\/\/hdl.handle.net\/2060\/19660000598"],"updatedDate":"2020-06-15T22:08:16","yearPublished":1966,"journals":[],"links":[{"type":"download","url":"https:\/\/core.ac.uk\/download\/pdf\/10255194.pdf"},{"type":"reader","url":"https:\/\/core.ac.uk\/reader\/10255194"},{"type":"thumbnail_m","url":"https:\/\/core.ac.uk\/image\/10255194\/large"},{"type":"thumbnail_l","url":"https:\/\/core.ac.uk\/image\/10255194\/large"},{"type":"display","url":"https:\/\/core.ac.uk\/works\/4465293"}]}],"searchId":"d05caba1180c66bbba2a03158629212c"}'
+    headers:
+      CF-RAY:
+      - 96d058dc3f6c0601-IAD
+      Cache-Control:
+      - no-cache, private
+      Cf-Cache-Status:
+      - DYNAMIC
+      Connection:
+      - keep-alive
+      # Content-Encoding removed to avoid double-decode issues in playback
+      Content-Length:
+      - '9893'
+      Content-Type:
+      - application/json
+      Date:
+      - Sun, 10 Aug 2025 14:57:43 GMT
+      Nel:
+      - '{"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}'
+      Report-To:
+      - '{"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=AhGAc2BJtJYjpmAq2VHoM95feRp9yQDWJxxfTlRPI1QfDpZJJMKNl%2BaGW5xuz8lLuBJEZZlFKIhr4idXKS0wutp2Uf6%2Byn3WSTv6xO6mNDKZGKH8uSQzCI6W"}]}'
+      Server:
+      - cloudflare
+      Symfony-Session-Noautocachecontrol:
+      - 'true'
+      Vary:
+      - Accept-Encoding
+      X-Frame-Options:
+      - SAMEORIGIN, SAMEORIGIN
+      X-Ratelimit-Limit:
+      - '10'
+      X-Ratelimit-Remaining:
+      - '8'
+      X-Ratelimit-Retry-After:
+      - 2025-08-10T14:57:43+0000
+      alt-svc:
+      - h3=":443"; ma=86400
+    status:
+      code: 200
+      message: OK
+version: 1

@@ -28,6 +28,15 @@ class Paper(Base):
     abstract: Mapped[str | None] = mapped_column(String(10000), nullable=True)
     license: Mapped[str | None] = mapped_column(String(255), nullable=True)
     pdf_path: Mapped[str | None] = mapped_column(String(4096), nullable=True)
+    # Phase-3 structured parsing and summarization
+    sections: Mapped[dict] = mapped_column(
+        JSONB().with_variant(GenericJSON(), "sqlite"), default=dict, nullable=False
+    )  # {"Title": "...", "Abstract": "...", ...}
+    conclusion: Mapped[str | None] = mapped_column(String(10000), nullable=True)
+    summary: Mapped[str | None] = mapped_column(String(1000), nullable=True)
+    # Parse telemetry
+    parse_attempts: Mapped[int] = mapped_column(nullable=False, default=0)
+    parse_error: Mapped[str | None] = mapped_column(String(1000), nullable=True)
     # Optional enrichment for Phase-2
     year: Mapped[int | None] = mapped_column(nullable=True)
     venue: Mapped[str | None] = mapped_column(String(255), nullable=True)

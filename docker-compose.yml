@@ -37,7 +37,13 @@ services:
       timeout: 5s
       retries: 30
 
+  grobid:
+    image: lfoppiano/grobid:0.8.0
+    container_name: literature_grobid
+    environment:
+      - GROBID_MODE=service
+    ports:
+      - "8070:8070"
+
 volumes:
   db_data:
-
-
