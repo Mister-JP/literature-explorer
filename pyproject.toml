@@ -25,6 +25,9 @@ black = "^24.4.2"
 ruff = "^0.4.8"
 pytest = "^8.2.2"
 vcrpy = "^6.0.2"
+playwright = "^1.45.1"
+pytest-playwright = "^0.5.1"
+Pillow = "^10.4.0"
 
 [tool.black]
 line-length = 100
