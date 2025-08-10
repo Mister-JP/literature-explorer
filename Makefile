@@ -1,6 +1,6 @@
 PY = python
 
-.PHONY: setup install lint format test db-up db-down search-up up down run-search reindex api sweep hydrate-citations sweep-daemon bench pre-commit parse-new summarize-new retro-parse retry-parses grobid-up grobid-down sweep-core sweep-pmc coverage-counts seed-demo-ui ingest-pdf
+.PHONY: setup install lint format test db-up db-down search-up up down run-search reindex api sweep hydrate-citations sweep-daemon bench pre-commit parse-new summarize-new retro-parse retry-parses grobid-up grobid-down sweep-core sweep-pmc coverage-counts seed-demo-ui ingest-pdf monitor
 
 setup:
 	@echo "Poetry not detected; use pip install -r requirements.txt or install Poetry if desired."
@@ -89,3 +89,6 @@ seed-demo-ui:
 
 ingest-pdf:
 	PYTHONPATH=src $(PY) -m ingestion.cli ingest-pdf --url "$(url)" --title "$(title)" $(if $(source),--source "$(source)") $(if $(license),--license "$(license)") $(if $(year),--year $(year)) $(if $(authors),--authors "$(authors)")
+
+monitor:
+	PYTHONPATH=src $(PY) scripts/synthetic_monitor.py --base-url $(or $(base), http://localhost:8000) $(if $(interval),--interval $(interval))
