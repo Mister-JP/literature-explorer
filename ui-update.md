@@ -203,10 +203,28 @@ make e2e-ci    # CI mode, writes artifacts to artifacts/ui-e2e/
 ## 11) Definition of Done (project level)
 
 * [ ] T-01 … T-07 implemented and green locally and in CI.
-* [ ] Artifacts reliably attach to CI runs.
-* [ ] Seeds make the suite deterministic; no calls to live providers.
-* [ ] Nightly synthetic monitor alerts on zero-result spikes or latency breaches.
-* [ ] A short **Runbook** exists: *“Debugging a failed UI E2E”* (open HTML report → inspect trace → reproduce with `BASE_URL`).
+* [ ] Artifacts reliably attach to CI runs.  
+  - Added artifact upload step in CI for `artifacts/ui-e2e/**`.
+* [ ] Seeds make the suite deterministic; no calls to live providers.  
+  - CI seeds via `ingestion.cli seed-demo-ui` and `reindex` before UI tests.
+* [ ] Nightly synthetic monitor alerts on zero-result spikes or latency breaches.  
+  - Scheduled workflow `Nightly Synthetic Monitor` added; configure `MONITOR_BASE_URL`/`ALERT_WEBHOOK_URL` secrets.
+* [ ] A short **Runbook** exists: *“Debugging a failed UI E2E”* (open HTML report → inspect trace → reproduce with `BASE_URL`).  
+  - See README: Runbook section “Debugging a failed UI E2E”.
+
+---
+
+## 14) Submission (concise)
+
+- **Scope delivered**: T-01..T-07 E2E (functional + visual + synthetic monitor).
+- **CI integrated**: Playwright, OpenSearch service, seeded SQLite; API started with readiness checks; diagnostics uploaded on failure; UI artifacts uploaded.
+- **Artifacts**: screenshots/CSV in `artifacts/ui-e2e/`; baseline at `ui-tests/snapshots/`.
+- **Security/Privacy**: logs only query hashes and non-PII telemetry.
+
+### Follow-ups
+- Ensure one green CI run with attached UI artifacts to tick remaining DoD items.
+- Set `MONITOR_BASE_URL` and optional `ALERT_WEBHOOK_URL` and ensure nightly run goes green.
+- Keep the Runbook link in `README.md` up to date.
 
 ---
 

@@ -1,0 +1,37 @@
+name: Nightly Synthetic Monitor
+
+on:
+  schedule:
+    - cron: '15 7 * * *'  # daily at 07:15 UTC
+  workflow_dispatch: {}
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run synthetic monitor once
+        env:
+          MONITOR_BASE_URL: ${{ secrets.MONITOR_BASE_URL }}
+          ALERT_WEBHOOK_URL: ${{ secrets.ALERT_WEBHOOK_URL }}
+        run: |
+          python scripts/synthetic_monitor.py --base-url "${MONITOR_BASE_URL:-https://example.com}" --queries transformer --size 3 --max-latency-ms 5000 --interval 0 | tee monitor.log
+
+      - name: Upload monitor log (always)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: synthetic-monitor-log
+          path: monitor.log
+          if-no-files-found: warn
+
+

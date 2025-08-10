@@ -87,6 +87,15 @@ jobs:
         run: |
           poetry run pytest -q ui-tests/e2e
 
+      - name: Upload UI E2E artifacts (always)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ui-e2e-artifacts
+          path: |
+            artifacts/ui-e2e/**
+          if-no-files-found: ignore
+
       - name: Collect diagnostics (always)
         if: always()
         run: |
