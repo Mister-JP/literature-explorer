@@ -105,11 +105,13 @@ make e2e-ci    # CI mode, writes artifacts to artifacts/ui-e2e/
 
 **AC**
 
-* [ ] Set `thread` + year range + license + source + `has_summary`.
-* [ ] Results update; `location.search` reflects those filters.
-* [ ] Hard refresh preserves view; copying the URL reproduces state.
+* [x] Set `thread` + year range + license + source + `has_summary`.
+* [x] Results update; `location.search` reflects those filters.
+* [x] Hard refresh preserves view; copying the URL reproduces state.
 
 **Artifacts:** screenshot of filtered view baseline for visual diff.
+
+- Completed 2025-08-10 by gpt-5-agent. Local run green; screenshot at `artifacts/ui-e2e/t04-filters.png`.
 
 ---
 
