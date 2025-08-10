@@ -133,10 +133,12 @@ make e2e-ci    # CI mode, writes artifacts to artifacts/ui-e2e/
 
 **AC**
 
-* [ ] Establish a single baseline snapshot of `/ui/search?q=<seed>`.
-* [ ] Subsequent test runs diff against baseline; material changes require approved snapshot update.
+* [x] Establish a single baseline snapshot of `/ui/search?q=<seed>`.
+* [x] Subsequent test runs diff against baseline; material changes require approved snapshot update.
 
 **Artifacts:** visual diff images on failure.
+
+- Completed 2025-08-10 by gpt-5-agent. Baseline created at `ui-tests/snapshots/t06-search-baseline.png`; current/diff images emitted to `artifacts/ui-e2e/` on mismatches.
 
 ---
 
