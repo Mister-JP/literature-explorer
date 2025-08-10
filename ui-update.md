@@ -119,11 +119,13 @@ make e2e-ci    # CI mode, writes artifacts to artifacts/ui-e2e/
 
 **AC**
 
-* [ ] Toggling star changes icon without page reload.
-* [ ] Export current filter as CSV and JSONL returns 200 and non-empty content with expected fields.
-* [ ] Export starred returns only the starred rows.
+* [x] Toggling star changes icon without page reload.
+* [x] Export current filter as CSV and JSONL returns 200 and non-empty content with expected fields.
+* [x] Export starred returns only the starred rows.
 
 **Artifacts:** downloaded fixture checked (size/headers), or stubbed response validated.
+
+- Completed 2025-08-10 by gpt-5-agent. Local run green; artifacts at `artifacts/ui-e2e/t05-visible.csv` and `t05-starred.csv`.
 
 ---
 
