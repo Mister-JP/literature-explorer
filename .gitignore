@@ -12,3 +12,8 @@ data/
 poetry.lock
 
 .DS_Store
+
+# Local env/example
+.env
+.env.local
+.secrets/

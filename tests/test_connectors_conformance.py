@@ -125,7 +125,7 @@ def test_core_with_cassette_when_not_live(monkeypatch):
     first_uri = interactions[0]["request"]["uri"]
     query_params = dict(parse_qsl(urlparse(first_uri).query))
     api_key = query_params.get("apiKey")
-    if not api_key:
+    if not api_key or api_key == "REDACTED_API_KEY":
         pytest.skip("CORE cassette missing apiKey in URI")
     monkeypatch.setenv("CORE_API_KEY", api_key)
 
