@@ -33,23 +33,8 @@ def _init_db(session_factory) -> None:
         ensure_schema(Base, engine)
 
 
-def _normalize_license(raw: str | None) -> str | None:
-    if not raw:
-        return None
-    s = raw.strip().lower()
-    # simple normalization for CC licenses
-    cc_map = {
-        "cc-by": "cc-by",
-        "cc by": "cc-by",
-        "cc-by-sa": "cc-by-sa",
-        "cc by-sa": "cc-by-sa",
-        "cc0": "cc0",
-        "public domain": "public-domain",
-    }
-    for k, v in cc_map.items():
-        if k in s:
-            return v
-    return s
+# Note: License normalization is implemented in `ingestion.utils.normalize_license` and
+# applied during ingest; no CLI-specific normalization needed here.
 
 
 def main(

@@ -11,5 +11,6 @@
 - Tests: license policy, API behavior, search query construction, live conformance (gated), citation chain
 - Docs: README updates, license policy doc, Phase-2 plan updated
 - Benchmark: p95 < 200ms achieved on dev corpus
+## Unreleased
 
-
+- Docs: mark UI filters status complete in engineering spec; no functional changes.
