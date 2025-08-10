@@ -1,0 +1,40 @@
+[tool.poetry]
+name = "literature-ingestion"
+version = "0.1.0"
+description = "Phase-1 backend foundations: arXiv ingestion pipeline with PostgreSQL storage and CLI"
+authors = ["Your Team <team@example.com>"]
+readme = "README.md"
+packages = [{ include = "ingestion", from = "src" }]
+
+[tool.poetry.dependencies]
+python = ">=3.10,<3.14"
+typer = "^0.12.3"
+sqlalchemy = "^2.0.36"
+psycopg = {version = "^3.2.9", extras=["binary"]}
+arxiv = "^2.1.0"
+tenacity = "^9.0.0"
+python-dotenv = "^1.0.1"
+requests = "^2.31.0"
+
+[tool.poetry.group.dev.dependencies]
+black = "^24.4.2"
+ruff = "^0.4.8"
+pytest = "^8.2.2"
+
+[tool.black]
+line-length = 100
+target-version = ["py310", "py311", "py312", "py313"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "C4", "PIE"]
+ignore = ["E501"]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+
