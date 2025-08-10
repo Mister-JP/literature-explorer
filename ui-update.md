@@ -78,11 +78,13 @@ make e2e-ci    # CI mode, writes artifacts to artifacts/ui-e2e/
 
 **AC**
 
-* [ ] Enter deliberate zero query → empty state with 3 suggestions.
-* [ ] Clicking “Report this search” triggers a telemetry call (assert by API log or test stub).
-* [ ] Returning to a valid query clears empty state.
+* [x] Enter deliberate zero query → empty state with 3 suggestions.
+* [x] Clicking “Report this search” triggers a telemetry call (assert by API log or test stub).
+* [x] Returning to a valid query clears empty state.
 
 **Artifacts:** screenshot + network log on failure.
+
+- Completed 2025-08-10 by gpt-5-agent. Local run green; verified POST `/ui/report` returns 200 and empty state clears on valid query.
 
 ---
 
@@ -190,7 +192,7 @@ make e2e-ci    # CI mode, writes artifacts to artifacts/ui-e2e/
 
 ## 11) Definition of Done (project level)
 
-* [x] T-01 … T-07 implemented and green locally and in CI.
+* [ ] T-01 … T-07 implemented and green locally and in CI.
 * [ ] Artifacts reliably attach to CI runs.
 * [ ] Seeds make the suite deterministic; no calls to live providers.
 * [ ] Nightly synthetic monitor alerts on zero-result spikes or latency breaches.
