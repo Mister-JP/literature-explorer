@@ -2,7 +2,8 @@ from __future__ import annotations
 
 import os
 import pathlib
-from urllib.parse import urlparse, parse_qs
+from urllib.parse import parse_qs, urlparse
+
 from playwright.sync_api import Page, expect
 
 
@@ -59,5 +60,3 @@ def test_t04_filters_and_url_sync(page: Page) -> None:
 
     # Artifact: screenshot of filtered view
     page.screenshot(path=str(artifacts_dir / "t04-filters.png"), full_page=True)
-
-

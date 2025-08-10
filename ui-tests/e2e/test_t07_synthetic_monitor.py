@@ -25,5 +25,3 @@ def test_t07_synthetic_monitor_once() -> None:
     out = proc.stdout + proc.stderr
     assert proc.returncode == 0, f"monitor failed: rc={proc.returncode} out={out}"
     assert "[OK]" in out, out
-
-

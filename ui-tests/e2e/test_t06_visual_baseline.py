@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import os
 import pathlib
+
 from PIL import Image, ImageChops
 from playwright.sync_api import Page
 
@@ -31,9 +32,10 @@ def test_t06_visual_baseline(page: Page) -> None:
         return
 
     # Compare with baseline
-    with Image.open(baseline_path).convert("RGBA") as img_base, Image.open(current_path).convert(
-        "RGBA"
-    ) as img_cur:
+    with (
+        Image.open(baseline_path).convert("RGBA") as img_base,
+        Image.open(current_path).convert("RGBA") as img_cur,
+    ):
         # Resize to the smallest common size to avoid DPI/noise mismatch causing exceptions
         w = min(img_base.width, img_cur.width)
         h = min(img_base.height, img_cur.height)
@@ -54,5 +56,3 @@ def test_t06_visual_baseline(page: Page) -> None:
         raise AssertionError(
             "Visual diff detected. Review artifacts/ui-e2e/t06-diff.png and update baseline if intended."
         )
-
-

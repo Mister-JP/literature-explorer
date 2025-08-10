@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import os
 import pathlib
+
 from playwright.sync_api import Page, expect
 
 
@@ -50,5 +51,3 @@ def test_t03_details_panel_loads_and_fails_gracefully(page: Page) -> None:
         expect(sections).to_be_visible()
         expect(sections).to_contain_text("Failed to load sections.")
     page.screenshot(path=str(artifacts_dir / "t03-details-failure.png"), full_page=True)
-
-

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import os
 import pathlib
+
 from playwright.sync_api import Page, expect
 
 
@@ -51,6 +52,6 @@ def test_t05_star_and_export(page: Page) -> None:
     assert len(lines2) == 2, f"expected exactly one starred row, got {len(lines2)-1}"
     # The first field in the data row should match the starred id (quoted)
     data_first_field = lines2[1].split(",")[0].strip().strip('"')
-    assert data_first_field == (item_id or ""), f"starred export id mismatch: {data_first_field} != {item_id}"
-
-
+    assert data_first_field == (
+        item_id or ""
+    ), f"starred export id mismatch: {data_first_field} != {item_id}"
