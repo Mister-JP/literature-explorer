@@ -1,6 +1,6 @@
 PY = python
 
-.PHONY: setup install lint format test db-up db-down search-up up down run-search reindex api sweep hydrate-citations sweep-daemon bench pre-commit parse-new summarize-new retro-parse retry-parses grobid-up grobid-down sweep-core sweep-pmc coverage-counts seed-demo-ui ingest-pdf monitor
+.PHONY: setup install lint format test db-up db-down search-up up down run-search reindex api sweep hydrate-citations sweep-daemon bench pre-commit parse-new summarize-new retro-parse retry-parses grobid-up grobid-down sweep-core sweep-pmc coverage-counts seed-demo-ui ingest-pdf monitor e2e e2e-ci
 
 setup:
 	@echo "Poetry not detected; use pip install -r requirements.txt or install Poetry if desired."
@@ -92,3 +92,16 @@ ingest-pdf:
 
 monitor:
 	PYTHONPATH=src $(PY) scripts/synthetic_monitor.py --base-url $(or $(base), http://localhost:8000) $(if $(interval),--interval $(interval))
+
+e2e:
+	@echo "Installing Playwright browsers (chromium) if needed..."
+	$(PY) -m playwright install chromium | cat
+	@echo "Running UI E2E tests..."
+	BASE_URL=$(or $(base), http://localhost:8000) PYTHONPATH=src $(PY) -m pytest -q ui-tests/e2e
+
+e2e-ci:
+	@mkdir -p artifacts/ui-e2e
+	@echo "Installing Playwright browsers (chromium) if needed..."
+	$(PY) -m playwright install chromium | cat
+	@echo "Running UI E2E tests in CI mode..."
+	BASE_URL=$(or $(base), http://localhost:8000) PYTHONPATH=src $(PY) -m pytest -q ui-tests/e2e || true
