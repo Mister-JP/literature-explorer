@@ -28,20 +28,26 @@ pip install -r requirements.txt
 pip install -e .
 ```
 
-2) Optional: start PostgreSQL locally (or use default SQLite):
+2) Configure environment:
+```bash
+cp .env.example .env
+# Optionally edit .env to point at PostgreSQL or enable semantic ranking
+```
+
+3) Optional: start PostgreSQL locally (or use default SQLite):
 ```bash
 docker compose up -d db
 export DATABASE_URL=postgresql+psycopg://postgres:postgres@localhost:5432/literature
 ```
 
-3) Seed demo, index, and try the UI:
+4) Seed demo, index, and try the UI:
 ```bash
 make seed-demo-ui
 make reindex
 make api   # visit http://localhost:8000/ui/search?q=transformer
 ```
 
-4) Or run a search (choose one):
+5) Or run a search (choose one):
 ```bash
 # Module entrypoint (no PYTHONPATH needed after editable install). Supports --author and --source (arxiv|openalex|semanticscholar).
 python -m ingestion.cli run --query "transformer" --author "Vaswani" --max-results 3 --source arxiv
@@ -148,6 +154,13 @@ make retro-parse
 - `GET /paper/{id}` returns metadata and PDF path if stored, plus `sections`, `conclusion`, `summary`.
 - `GET /summaries?q=...&size=N` returns top summaries
 
+Examples (curl):
+```bash
+curl -s 'http://localhost:8000/search?q=transformer&size=5' | jq '.hits[] | {id,title,year,summary}'
+curl -s 'http://localhost:8000/paper/1' | jq '{title, license, has_sections: (.sections|length>0)}'
+curl -s 'http://localhost:8000/summaries?q=climate%20change&size=3' | jq
+```
+
 Semantic re-ranking (optional):
 - Enable via `ENABLE_SEMANTIC=1`
 - Config via env: `SEMANTIC_MODEL`, `WEIGHT_SEMANTIC`, `WEIGHT_CITATIONS`, `WEIGHT_RECENCY`, `SEMANTIC_TOPK`
@@ -155,6 +168,14 @@ Semantic re-ranking (optional):
 
 ### Minimal UI
 - `GET /ui/search?q=...&size=20` renders a simple table with title, year, citation count, license badge, and inline summary. Rows can expand to show parsed sections (Abstract, Methods, Results, Conclusion) when available.
+
+### Developer experience
+- Pre-commit hooks: run `pre-commit` once, or `make pre-commit` to format and lint
+- Secret scanning: gitleaks runs via pre-commit; do not commit `.env` or secrets
+- Troubleshooting:
+  - OpenSearch unavailable: run `make search-up` and verify `SEARCH_HOST`
+  - GROBID not running: run `make grobid-up` or set `PARSER_BACKEND=pdfminer`
+  - Summary missing: ensure `make parse-new` then `make summarize-new` (or `make retro-parse`)
 
 #### Example: query -> summaries via CLI
 ```bash

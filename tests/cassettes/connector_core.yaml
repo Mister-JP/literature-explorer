@@ -11,13 +11,13 @@ interactions:
       User-Agent:
       - literature-ingestion/0.2
     method: GET
-    uri: https://api.core.ac.uk/v3/search/works?q=transformer&limit=2&apiKey=m6wGMWAbg1ofdQu7SzIXx8vVj2OeaHkC
+    uri: https://api.core.ac.uk/v3/search/works?q=transformer&limit=2&apiKey=REDACTED_API_KEY
   response:
     body:
       string: "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\"
-        />\n        <meta http-equiv=\"refresh\" content=\"0;url='https://api.core.ac.uk/v3/search/works/?q=transformer&amp;limit=2&amp;apiKey=m6wGMWAbg1ofdQu7SzIXx8vVj2OeaHkC'\"
-        />\n\n        <title>Redirecting to https://api.core.ac.uk/v3/search/works/?q=transformer&amp;limit=2&amp;apiKey=m6wGMWAbg1ofdQu7SzIXx8vVj2OeaHkC</title>\n
-        \   </head>\n    <body>\n        Redirecting to <a href=\"https://api.core.ac.uk/v3/search/works/?q=transformer&amp;limit=2&amp;apiKey=m6wGMWAbg1ofdQu7SzIXx8vVj2OeaHkC\">https://api.core.ac.uk/v3/search/works/?q=transformer&amp;limit=2&amp;apiKey=m6wGMWAbg1ofdQu7SzIXx8vVj2OeaHkC</a>.\n
+        />\n        <meta http-equiv=\"refresh\" content=\"0;url='https://api.core.ac.uk/v3/search/works/?q=transformer&amp;limit=2&amp;apiKey=REDACTED_API_KEY'\"
+        />\n\n        <title>Redirecting to https://api.core.ac.uk/v3/search/works/?q=transformer&amp;limit=2&amp;apiKey=REDACTED_API_KEY</title>\n
+        \   </head>\n    <body>\n        Redirecting to <a href=\"https://api.core.ac.uk/v3/search/works/?q=transformer&amp;limit=2&amp;apiKey=REDACTED_API_KEY\">https://api.core.ac.uk/v3/search/works/?q=transformer&amp;limit=2&amp;apiKey=REDACTED_API_KEY</a>.\n
         \   </body>\n</html>"
     headers:
       CF-RAY:
@@ -31,7 +31,7 @@ interactions:
       Date:
       - Sun, 10 Aug 2025 14:57:41 GMT
       Location:
-      - https://api.core.ac.uk/v3/search/works/?q=transformer&limit=2&apiKey=m6wGMWAbg1ofdQu7SzIXx8vVj2OeaHkC
+      - https://api.core.ac.uk/v3/search/works/?q=transformer&limit=2&apiKey=REDACTED_API_KEY
       Nel:
       - '{"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}'
       Report-To:
@@ -65,7 +65,7 @@ interactions:
       User-Agent:
       - literature-ingestion/0.2
     method: GET
-    uri: https://api.core.ac.uk/v3/search/works/?q=transformer&limit=2&apiKey=m6wGMWAbg1ofdQu7SzIXx8vVj2OeaHkC
+    uri: https://api.core.ac.uk/v3/search/works/?q=transformer&limit=2&apiKey=REDACTED_API_KEY
   response:
     body:
       string: '{"totalHits":397854,"limit":2,"offset":0,"results":[{"acceptedDate":"","arxivId":null,"authors":[{"name":"Delgado
