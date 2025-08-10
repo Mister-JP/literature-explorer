@@ -92,10 +92,12 @@ make e2e-ci    # CI mode, writes artifacts to artifacts/ui-e2e/
 
 **AC**
 
-* [ ] Clicking “Details” opens panel; shows either parsed sections or “No parsed sections available.”
-* [ ] If the details API is forced to fail (mock/flag), UI shows a friendly failure message and logs `api_error`.
+* [x] Clicking “Details” opens panel; shows either parsed sections or “No parsed sections available.”
+* [x] If the details API is forced to fail (mock/flag), UI shows a friendly failure message and logs `api_error`.
 
 **Artifacts:** trace on failure.
+
+- Completed 2025-08-10 by gpt-5-agent. Local run green; screenshots at `artifacts/ui-e2e/t03-details-success.png` and `t03-details-failure.png`.
 
 ---
 
