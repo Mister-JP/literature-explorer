@@ -1,0 +1,10 @@
+---
+# Example sweeps list
+- query: "large language models"
+  source: openalex
+  max_results: 10
+- query: "transformers"
+  source: semanticscholar
+  max_results: 5
+  author: "Vaswani"
+

@@ -1,0 +1,112 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.31.0
+    method: GET
+    uri: https://api.semanticscholar.org/graph/v1/paper/search?query=transformer&offset=0&limit=2&fields=title%2Cabstract%2Cauthors%2Cyear%2Cvenue%2CexternalIds%2CopenAccessPdf%2CcitationCount
+  response:
+    body:
+      string: '{"total": 290322, "offset": 0, "next": 2, "data": [{"paperId": "c8b25fab5608c3e033d34b4483ec47e68ba109b7",
+        "externalIds": {"ArXiv": "2103.14030", "DBLP": "conf/iccv/LiuL00W0LG21", "DOI":
+        "10.1109/ICCV48922.2021.00986", "CorpusId": 232352874}, "title": "Swin Transformer:
+        Hierarchical Vision Transformer using Shifted Windows", "venue": "IEEE International
+        Conference on Computer Vision", "year": 2021, "citationCount": 22614, "openAccessPdf":
+        {"url": "http://arxiv.org/pdf/2103.14030", "status": "GREEN", "license": null,
+        "disclaimer": "Notice: Paper or abstract available at https://arxiv.org/abs/2103.14030,
+        which is subject to the license by the author or copyright owner provided
+        with this content. Please go to the source to verify the license and copyright
+        information for your use."}, "authors": [{"authorId": "2109371439", "name":
+        "Ze Liu"}, {"authorId": "51091819", "name": "Yutong Lin"}, {"authorId": "2112823372",
+        "name": "Yue Cao"}, {"authorId": "1823518756", "name": "Han Hu"}, {"authorId":
+        "2107995927", "name": "Yixuan Wei"}, {"authorId": "2148904543", "name": "Zheng
+        Zhang"}, {"authorId": "145676588", "name": "Stephen Lin"}, {"authorId": "2261753424",
+        "name": "B. Guo"}], "abstract": "This paper presents a new vision Transformer,
+        called Swin Transformer, that capably serves as a general-purpose backbone
+        for computer vision. Challenges in adapting Transformer from language to vision
+        arise from differences between the two domains, such as large variations in
+        the scale of visual entities and the high resolution of pixels in images compared
+        to words in text. To address these differences, we propose a hierarchical
+        Transformer whose representation is computed with Shifted windows. The shifted
+        windowing scheme brings greater efficiency by limiting self-attention computation
+        to non-overlapping local windows while also allowing for cross-window connection.
+        This hierarchical architecture has the flexibility to model at various scales
+        and has linear computational complexity with respect to image size. These
+        qualities of Swin Transformer make it compatible with a broad range of vision
+        tasks, including image classification (87.3 top-1 accuracy on ImageNet-1K)
+        and dense prediction tasks such as object detection (58.7 box AP and 51.1
+        mask AP on COCO test-dev) and semantic segmentation (53.5 mIoU on ADE20K val).
+        Its performance surpasses the previous state-of-the-art by a large margin
+        of +2.7 box AP and +2.6 mask AP on COCO, and +3.2 mIoU on ADE20K, demonstrating
+        the potential of Transformer-based models as vision backbones. The hierarchical
+        design and the shifted window approach also prove beneficial for all-MLP architectures.
+        The code and models are publicly available at https://github.com/microsoft/Swin-Transformer."},
+        {"paperId": "925ad2897d1b5decbea320d07e99afa9110e09b2", "externalIds": {"DBLP":
+        "journals/corr/abs-2004-05150", "MAG": "3015468748", "ArXiv": "2004.05150",
+        "CorpusId": 215737171}, "title": "Longformer: The Long-Document Transformer",
+        "venue": "arXiv.org", "year": 2020, "citationCount": 4225, "openAccessPdf":
+        {"url": "", "status": null, "license": null, "disclaimer": "Notice: Paper
+        or abstract available at https://arxiv.org/abs/2004.05150, which is subject
+        to the license by the author or copyright owner provided with this content.
+        Please go to the source to verify the license and copyright information for
+        your use."}, "authors": [{"authorId": "46181066", "name": "Iz Beltagy"}, {"authorId":
+        "39139825", "name": "Matthew E. Peters"}, {"authorId": "2527954", "name":
+        "Arman Cohan"}], "abstract": "Transformer-based models are unable to process
+        long sequences due to their self-attention operation, which scales quadratically
+        with the sequence length. To address this limitation, we introduce the Longformer
+        with an attention mechanism that scales linearly with sequence length, making
+        it easy to process documents of thousands of tokens or longer. Longformer''s
+        attention mechanism is a drop-in replacement for the standard self-attention
+        and combines a local windowed attention with a task motivated global attention.
+        Following prior work on long-sequence transformers, we evaluate Longformer
+        on character-level language modeling and achieve state-of-the-art results
+        on text8 and enwik8. In contrast to most prior work, we also pretrain Longformer
+        and finetune it on a variety of downstream tasks. Our pretrained Longformer
+        consistently outperforms RoBERTa on long document tasks and sets new state-of-the-art
+        results on WikiHop and TriviaQA. We finally introduce the Longformer-Encoder-Decoder
+        (LED), a Longformer variant for supporting long document generative sequence-to-sequence
+        tasks, and demonstrate its effectiveness on the arXiv summarization dataset."}]}
+
+        '
+    headers:
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '4724'
+      Content-Type:
+      - application/json
+      Date:
+      - Sat, 09 Aug 2025 22:20:14 GMT
+      Via:
+      - 1.1 c902866f8cb1b5f83ebec507e24ee014.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - pqVav59UDQKoN-Z6P1W9UnOLa6i7Qd5l2P9t6xyY1niXOd9LEJ-MMw==
+      X-Amz-Cf-Pop:
+      - BNA50-P1
+      X-Cache:
+      - Miss from cloudfront
+      x-amz-apigw-id:
+      - PDxwsGYcPHcEEBA=
+      x-amzn-Remapped-Connection:
+      - keep-alive
+      x-amzn-Remapped-Content-Length:
+      - '4724'
+      x-amzn-Remapped-Date:
+      - Sat, 09 Aug 2025 22:20:14 GMT
+      x-amzn-Remapped-Server:
+      - gunicorn
+      x-amzn-RequestId:
+      - 0ca3825f-8bdf-4664-9561-fa78eeb7ffb3
+    status:
+      code: 200
+      message: OK
+version: 1

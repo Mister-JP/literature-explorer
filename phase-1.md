@@ -10,7 +10,7 @@ By the end of Phase-1, we should have a minimal but functioning backend capable 
 - [x] **Codebase Bootstrapped**
   - [x] Create project repository (this repo).
   - [x] Set up Python environment with dependency management (Poetry via `pyproject.toml`; optional `requirements.txt`).
-  - [ ] Initialize version control branch protection rules (repo exists; branch protection TBD).
+  - [x] Initialize version control branch protection rules.
   - [x] Configure CI pipeline for automated linting & tests (GitHub Actions present).
 
 - [x] **Database & Storage Setup**
@@ -64,7 +64,7 @@ By the end of Phase-1, we should have a minimal but functioning backend capable 
   - [x] Metadata stored in DB.
   - [x] PDFs stored in blob storage.
 - [x] No duplicates are stored for repeated queries.
-- [ ] All code passes linting & basic tests in CI (CI configured; first green run pending).
+- [x] All code passes linting & basic tests in CI.
 - [x] Minimal docs exist for setup & connector extension.
 
 ---

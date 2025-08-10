@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "literature-ingestion"
-version = "0.1.0"
+version = "0.2.0"
 description = "Phase-1 backend foundations: arXiv ingestion pipeline with PostgreSQL storage and CLI"
 authors = ["Your Team <team@example.com>"]
 readme = "README.md"
@@ -15,11 +15,15 @@ arxiv = "^2.1.0"
 tenacity = "^9.0.0"
 python-dotenv = "^1.0.1"
 requests = "^2.31.0"
+fastapi = "^0.111.0"
+uvicorn = {version = "^0.30.0", extras = ["standard"]}
+opensearch-py = "^2.6.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "^24.4.2"
 ruff = "^0.4.8"
 pytest = "^8.2.2"
+vcrpy = "^6.0.1"
 
 [tool.black]
 line-length = 100
@@ -28,6 +32,7 @@ target-version = ["py310", "py311", "py312", "py313"]
 [tool.ruff]
 line-length = 100
 target-version = "py310"
+src = ["src"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "SIM", "C4", "PIE"]

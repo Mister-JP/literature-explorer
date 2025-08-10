@@ -1,0 +1,90 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.31.0
+    method: GET
+    uri: https://doaj.org/api/v2/search/articles/?q=transformer&pageSize=2
+  response:
+    body:
+      string: '{"status": "not_found", "error": "No endpoint at v2/search/articles/.
+        See https://doaj.org/api/swagger.json for valid paths or read the documentation
+        at https://doaj.org/api/docs. (ref: 1b3e03ea-756f-11f0-9af1-95996f9b04e9)"}'
+    headers:
+      Access-Control-Allow-Origin:
+      - '*'
+      CF-RAY:
+      - 96caa4a0bdb6d227-IAD
+      Cf-Cache-Status:
+      - DYNAMIC
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Sat, 09 Aug 2025 22:20:50 GMT
+      Nel:
+      - '{"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}'
+      Report-To:
+      - '{"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=bYH0hTlwuSP7zjsc6v1%2F4ftukwLUlCMLf2j%2Bkv6rDyx%2FAFJOqU47BFyWVZ17eel3PitVgNpat1NHnT6zPtcSvUVtWkLQrODas62hkdCrebspGwk%3D"}]}'
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.31.0
+    method: GET
+    uri: https://doaj.org/api/search/articles/?q=transformer&pageSize=2
+  response:
+    body:
+      string: '{"status": "not_found", "error": "No endpoint at search/articles/.
+        See https://doaj.org/api/swagger.json for valid paths or read the documentation
+        at https://doaj.org/api/docs. (ref: 1b8a07b8-756f-11f0-9af1-95996f9b04e9)"}'
+    headers:
+      Access-Control-Allow-Origin:
+      - '*'
+      CF-RAY:
+      - 96caa4a3da580132-IAD
+      Cf-Cache-Status:
+      - DYNAMIC
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Sat, 09 Aug 2025 22:20:51 GMT
+      Nel:
+      - '{"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}'
+      Report-To:
+      - '{"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=1FI05ywFDTjp3eL8GC6LAZRx7dBly6oIwMESQ1fotVuQ5hJPKGM%2BlsEFd0pF0drg36jJLp5KyinL9bq6rCN4li3Zdp5ngJAB2FM0qmKDywT5a20%3D"}]}'
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+    status:
+      code: 404
+      message: Not Found
+version: 1
