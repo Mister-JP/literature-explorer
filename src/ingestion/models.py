@@ -47,3 +47,16 @@ class Paper(Base):
     fetched_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_now_utc)
 
     __table_args__ = (UniqueConstraint("source", "external_id", name="uq_source_external_id"),)
+
+
+class UiEvent(Base):
+    __tablename__ = "ui_events"
+
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_now_utc)
+    session_id: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    ui_version: Mapped[str | None] = mapped_column(String(32), nullable=True)
+    event_type: Mapped[str] = mapped_column(String(64), nullable=False)
+    payload: Mapped[dict] = mapped_column(
+        JSONB().with_variant(GenericJSON(), "sqlite"), default=dict, nullable=False
+    )

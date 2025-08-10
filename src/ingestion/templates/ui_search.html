@@ -11,12 +11,23 @@
     input[type="text"] { width: 360px; padding: 6px 10px; }
     table { border-collapse: collapse; width: 100%; }
     th, td { padding: 8px 10px; border-bottom: 1px solid #eee; vertical-align: top; }
-    .badge { display: inline-block; padding: 2px 6px; border-radius: 4px; background: #eef; color: #334; font-size: 12px; }
+    .badge { display: inline-block; padding: 2px 6px; border-radius: 4px; background: #eef; color: #334; font-size: 12px; margin-right: 4px; }
     .row-details { display: none; background: #fafafa; }
     .summary { color: #222; }
+    .summary-text { display: -webkit-box; -webkit-line-clamp: 4; line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+    .summary-text.expanded { display: block; -webkit-line-clamp: initial; line-clamp: initial; overflow: visible; }
+    .summary-toggle { font-size: 12px; padding: 0; margin-top: 4px; background: none; border: 0; color: #06c; cursor: pointer; }
     .title { font-weight: 600; }
     .muted { color: #666; font-size: 12px; }
+    .provenance { margin-top: 4px; }
+    .provenance a { color: #06c; text-decoration: none; }
+    .provenance a:hover { text-decoration: underline; }
     button.expand { font-size: 12px; padding: 4px 6px; }
+    /* Loading overlay for search */
+    #loading-overlay { position: fixed; inset: 0; background: rgba(255,255,255,0.7); display: none; align-items: center; justify-content: center; z-index: 9999; }
+    .spinner { width: 28px; height: 28px; border: 3px solid #ddd; border-top-color: #06c; border-radius: 50%; animation: spin 0.8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .inline-spinner { width: 16px; height: 16px; border: 2px solid #ddd; border-top-color: #06c; border-radius: 50%; animation: spin 0.8s linear infinite; display: inline-block; vertical-align: middle; margin-right: 6px; }
     .sections { margin-top: 8px; }
     .section { margin-bottom: 10px; }
     .section h4 { margin: 0 0 4px; font-size: 13px; }
@@ -25,14 +36,123 @@
 </head>
 <body>
   <h1>Literature Search</h1>
-  <form method="get" action="/ui/search">
+  <form id="search-form" method="get" action="/ui/search">
     <input type="text" name="q" value="{{ q }}" placeholder="Search papers..." />
+    <select name="sort" aria-label="Sort order">
+      <option value="recency" {% if sort == 'recency' %}selected{% endif %}>Sort: Recency</option>
+      <option value="citations" {% if sort == 'citations' %}selected{% endif %}>Sort: Citations</option>
+    </select>
+
+    <fieldset style="border:0; padding:0; margin:8px 0;">
+      <legend class="muted" style="font-size:12px;">Filters</legend>
+      <label>
+        Source
+        <select name="source">
+          <option value="">Any</option>
+          <option value="arxiv" {% if source == 'arxiv' %}selected{% endif %}>arXiv</option>
+          <option value="pmc" {% if source == 'pmc' %}selected{% endif %}>PMC</option>
+          <option value="doaj" {% if source == 'doaj' %}selected{% endif %}>DOAJ</option>
+          <option value="openalex" {% if source == 'openalex' %}selected{% endif %}>OpenAlex</option>
+          <option value="semanticscholar" {% if source == 'semanticscholar' %}selected{% endif %}>Semantic Scholar</option>
+        </select>
+      </label>
+      <label style="margin-left:8px;">
+        License
+        <select name="license">
+          <option value="">Any</option>
+          <option value="cc-by" {% if license == 'cc-by' %}selected{% endif %}>CC-BY</option>
+          <option value="cc-by-sa" {% if license == 'cc-by-sa' %}selected{% endif %}>CC-BY-SA</option>
+          <option value="cc0" {% if license == 'cc0' %}selected{% endif %}>CC0</option>
+          <option value="other" {% if license == 'other' %}selected{% endif %}>Other</option>
+        </select>
+      </label>
+      <label style="margin-left:8px;">
+        Venue
+        <input type="text" name="venue" value="{{ venue }}" placeholder="e.g., NeurIPS" />
+      </label>
+      <label style="margin-left:8px;">
+        Year
+        <input type="number" name="year_start" min="1900" max="2100" value="{{ year_start or '' }}" style="width:88px;" />
+        –
+        <input type="number" name="year_end" min="1900" max="2100" value="{{ year_end or '' }}" style="width:88px;" />
+      </label>
+      <label style="margin-left:8px;">
+        <input type="checkbox" name="has_summary" value="1" {% if has_summary %}checked{% endif %} /> Has summary
+      </label>
+    </fieldset>
+
     <button type="submit">Search</button>
   </form>
+
+  <div id="loading-overlay" aria-hidden="true" role="status">
+    <div class="spinner" aria-label="Loading"></div>
+  </div>
+
+  <!-- Debug overlay toggle and panel -->
+  <div style="position: fixed; right: 16px; bottom: 16px; z-index: 10000; display: flex; flex-direction: column; align-items: flex-end; gap: 8px;">
+    <button id="debug-toggle" type="button" title="Toggle debug overlay" aria-controls="debug-overlay" aria-expanded="false" style="background:#222;color:#fff;border:0;border-radius:16px;padding:6px 10px;font-size:12px;cursor:pointer;opacity:0.85;">Debug</button>
+    <div id="debug-overlay" role="region" aria-label="Debug overlay" style="display:none; width: 360px; max-width: calc(100vw - 32px); background:#111;color:#e6e6e6;border-radius:8px; box-shadow: 0 8px 24px rgba(0,0,0,0.3); padding: 10px; font-size: 12px;">
+      <div style="display:flex;justify-content:space-between;align-items:center; margin-bottom:6px;">
+        <strong>UI Debug</strong>
+        <span class="muted">Build: <code id="dbg-build">{{ build_version or 'dev' }}</code></span>
+      </div>
+      <div style="display:grid; grid-template-columns: 110px 1fr; gap: 4px 8px;">
+        <div class="muted">Result count</div><div id="dbg-total">-</div>
+        <div class="muted">Latency (ms)</div><div id="dbg-latency">-</div>
+        <div class="muted">Sort</div><div id="dbg-sort">-</div>
+      </div>
+      <div style="margin-top:8px;">
+        <div class="muted" style="margin-bottom:2px;">Last search payload</div>
+        <pre id="dbg-payload" style="background:#0b0b0b; color:#dcdcdc; padding:8px; border-radius:6px; max-height: 220px; overflow:auto; white-space: pre-wrap;"></pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="muted" id="result-meta" data-total="{{ total if total is defined else '' }}" data-latency="{{ latency_ms if latency_ms is defined else '' }}" data-sort="{{ sort or '' }}">
+    {% if total is defined %}
+      <span><strong>{{ total }}</strong> results</span>
+      {% if latency_ms is defined %}
+        · <span>Latency: {{ latency_ms }} ms</span>
+      {% endif %}
+      · <span>Sort: {{ sort }}</span>
+      {% if source or license or venue or year_start or year_end or has_summary %}
+        · <span>Filters:</span>
+        <span>
+          {% if source %}<span class="badge">source: {{ source }}</span>{% endif %}
+          {% if license %}<span class="badge">license: {{ license }}</span>{% endif %}
+          {% if venue %}<span class="badge">venue: {{ venue }}</span>{% endif %}
+          {% if year_start or year_end %}<span class="badge">year: {{ year_start or '…' }}–{{ year_end or '…' }}</span>{% endif %}
+          {% if has_summary %}<span class="badge">has summary</span>{% endif %}
+        </span>
+      {% endif %}
+    {% endif %}
+  </div>
+
+  <div id="toolbar" style="margin: 8px 0 12px; display: flex; align-items: center; gap: 8px;">
+    <button type="button" id="export-visible" aria-label="Export visible rows to CSV">Export visible (CSV)</button>
+    <button type="button" id="export-starred" aria-label="Export starred rows to CSV">Export starred (CSV)</button>
+    <span class="muted" id="star-count">Starred: 0</span>
+  </div>
+
+  {% if total is defined and total == 0 %}
+  <div id="empty-state" style="padding: 12px; border: 1px dashed #ddd; background: #fcfcfc; margin: 12px 0;">
+    <div style="margin-bottom: 8px;">
+      <strong>No results found.</strong>
+    </div>
+    <ul class="muted" style="margin: 8px 0 12px 18px;">
+      <li>Try fewer or broader keywords.</li>
+      <li>Remove or relax filters (year, source, license).</li>
+      <li>Use synonyms or related terms.</li>
+    </ul>
+    <button id="report-btn" type="button">Report this search</button>
+    <span id="report-status" class="muted" style="margin-left: 8px;"></span>
+  </div>
+  {% endif %}
 
   <table>
     <thead>
       <tr>
+        <th style="width:48px;">Star</th>
         <th>Title</th>
         <th>Year</th>
         <th>Citations</th>
@@ -44,7 +164,24 @@
     <tbody>
       {% for item in items %}
       <tr>
-        <td class="title">{{ item.title }}</td>
+        <td>
+          <button type="button" class="star" data-id="{{ item.id }}" aria-pressed="false" title="Star this item" style="background:none;border:0;font-size:18px;cursor:pointer;">☆</button>
+        </td>
+        <td class="title">
+          {{ item.title }}
+          <div class="muted provenance">
+            {% if item.source %}<span class="badge">{{ item.source }}</span>{% endif %}
+            {% if item.doi %}
+              · <a href="https://doi.org/{{ item.doi }}" target="_blank" rel="noopener">DOI</a>
+            {% endif %}
+            {% if item.source == 'arxiv' and item.external_id %}
+              · <a href="https://arxiv.org/abs/{{ item.external_id | replace('arXiv:', '') }}" target="_blank" rel="noopener">arXiv</a>
+            {% endif %}
+            {% if item.source == 'pmc' and item.external_id %}
+              · <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/{{ item.external_id }}/" target="_blank" rel="noopener">PMC</a>
+            {% endif %}
+          </div>
+        </td>
         <td>{{ item.year or '' }}</td>
         <td>{{ item.citation_count or 0 }}</td>
         <td>
@@ -54,13 +191,16 @@
             <span class="muted">n/a</span>
           {% endif %}
         </td>
-        <td class="summary">{{ item.summary or item.abstract or '' }}</td>
+        <td class="summary">
+          <div class="summary-text" id="sum-{{ item.id }}">{{ item.summary or item.abstract or '' }}</div>
+          <button type="button" class="summary-toggle" aria-expanded="false" aria-controls="sum-{{ item.id }}" hidden>Show more</button>
+        </td>
         <td><button type="button" class="expand" data-id="{{ item.id }}">Details</button></td>
       </tr>
       <tr class="row-details" id="details-{{ item.id }}">
-        <td colspan="6">
+        <td colspan="7">
           <div class="sections" data-loaded="0">
-            <div class="muted">Loading sections...</div>
+            <div class="muted"><span class="inline-spinner"></span>Loading sections...</div>
           </div>
         </td>
       </tr>
@@ -69,6 +209,155 @@
   </table>
 
   <script>
+    // ---- Telemetry helpers (fire-and-forget; failures never break UI) ----
+    (function(){
+      const UI_VERSION = 'v1';
+      function getSessionId(){
+        let v = localStorage.getItem('ui_session_id');
+        if (!v) { v = Math.random().toString(36).slice(2); localStorage.setItem('ui_session_id', v); }
+        return v;
+      }
+      async function sha256Hex(str){
+        try {
+          const enc = new TextEncoder();
+          const buf = await crypto.subtle.digest('SHA-256', enc.encode(str || ''));
+          return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+        } catch { return ''; }
+      }
+      function currentFiltersFromUrl(){
+        const p = new URLSearchParams(window.location.search);
+        return {
+          sort: p.get('sort') || '',
+          source: p.get('source') || '',
+          license: p.get('license') || '',
+          venue: p.get('venue') || '',
+          year_start: p.get('year_start') || '',
+          year_end: p.get('year_end') || '',
+          has_summary: p.get('has_summary') ? 1 : 0
+        };
+      }
+      function filtersFromForm(form){
+        try {
+          const fd = new FormData(form);
+          return {
+            sort: fd.get('sort') || '',
+            source: fd.get('source') || '',
+            license: fd.get('license') || '',
+            venue: fd.get('venue') || '',
+            year_start: fd.get('year_start') || '',
+            year_end: fd.get('year_end') || '',
+            has_summary: fd.get('has_summary') ? 1 : 0
+          };
+        } catch { return currentFiltersFromUrl(); }
+      }
+      function _send(bodyStr){
+        try {
+          if (navigator.sendBeacon) {
+            const blob = new Blob([bodyStr], { type: 'application/json' });
+            navigator.sendBeacon('/ui/telemetry', blob);
+            return;
+          }
+          fetch('/ui/telemetry', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: bodyStr, keepalive: true }).catch(()=>{});
+        } catch {}
+      }
+      function sendTelemetry(event_type, payload){
+        try {
+          const body = JSON.stringify({
+            session_id: getSessionId(),
+            ui_version: UI_VERSION,
+            event_type,
+            ts_iso: new Date().toISOString(),
+            url: window.location.pathname + window.location.search,
+            payload
+          });
+          _send(body);
+        } catch {}
+      }
+      // expose minimal API
+      window.__telemetry = { sendTelemetry, sha256Hex, currentFiltersFromUrl, filtersFromForm };
+    })();
+
+    // Show page overlay spinner on search submit and hide on navigation
+    (function(){
+      const form = document.getElementById('search-form');
+      const overlay = document.getElementById('loading-overlay');
+      if (form && overlay) {
+        form.addEventListener('submit', function(){
+          overlay.style.display = 'flex';
+          try {
+            // mark navigation start for client-observed latency
+            sessionStorage.setItem('last_search_t0_ms', String(Date.now()));
+            const q = (form.querySelector('input[name="q"]')?.value || '').trim();
+            // best-effort async hash + send, do not block navigation
+            (async () => {
+              const query_hash = await window.__telemetry.sha256Hex(q);
+              const filters = window.__telemetry.filtersFromForm(form);
+              window.__telemetry.sendTelemetry('search_submit', { query_hash, filters });
+            })();
+          } catch {}
+          // Let the navigation proceed normally; overlay will disappear on new page load
+        });
+      }
+    })();
+
+    // Initialize summary truncation toggles
+    (function(){
+      const MAX_CHARS = 260;
+      document.querySelectorAll('td.summary').forEach(td => {
+        const textEl = td.querySelector('.summary-text');
+        const toggle = td.querySelector('.summary-toggle');
+        if (!textEl || !toggle) return;
+        const len = (textEl.textContent || '').trim().length;
+        if (len > MAX_CHARS) {
+          toggle.hidden = false;
+        }
+      });
+    })();
+
+    async function reportZeroResult() {
+      const btn = document.getElementById('report-btn');
+      const status = document.getElementById('report-status');
+      if (!btn) return;
+      btn.disabled = true;
+      status.textContent = 'Sending...';
+      const sessionId = localStorage.getItem('ui_session_id') || (function(){
+        const v = Math.random().toString(36).slice(2);
+        localStorage.setItem('ui_session_id', v);
+        return v;
+      })();
+      // Privacy: hash the query client-side
+      const q = new URLSearchParams(window.location.search).get('q') || '';
+      const queryHash = await window.__telemetry.sha256Hex(q);
+
+      try {
+        const resp = await fetch('/ui/report', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            session_id: sessionId,
+            ui_version: 'v1',
+            event_type: 'zero_result_report',
+            payload: {
+              query_hash: queryHash,
+              url: window.location.pathname + window.location.search
+            }
+          })
+        });
+        if (!resp.ok) throw new Error('report failed');
+        status.textContent = 'Reported. Thank you!';
+      } catch (e) {
+        status.textContent = 'Report failed (ignored).';
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('#report-btn');
+      if (btn) {
+        reportZeroResult();
+      }
+    });
     function renderSections(container, data) {
       const wanted = ["Abstract", "Methods", "Results", "Conclusion"]; // display order
       const sections = data.sections || {};
@@ -114,14 +403,224 @@
       row.style.display = 'table-row';
       if (container.dataset.loaded === '1') return;
       try {
+        const t0 = performance.now();
         const resp = await fetch(`/paper/${id}`);
-        if (!resp.ok) throw new Error('request failed');
+        const t1 = performance.now();
+        if (!resp.ok) {
+          window.__telemetry.sendTelemetry('api_error', { endpoint: `/paper/${id}`, status: resp.status, latency_ms: Math.round(t1 - t0) });
+          throw new Error('request failed');
+        }
         const data = await resp.json();
         renderSections(container, data);
+        window.__telemetry.sendTelemetry('details_loaded', { id, latency_ms: Math.round(performance.now() - t0) });
       } catch (err) {
         container.innerHTML = '<div class="muted">Failed to load sections.</div>';
+        window.__telemetry.sendTelemetry('details_failed', { id });
       }
     });
+
+    // Toggle summary expand/collapse
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('button.summary-toggle');
+      if (!btn) return;
+      const targetId = btn.getAttribute('aria-controls');
+      const textEl = document.getElementById(targetId);
+      if (!textEl) return;
+      const expanded = textEl.classList.toggle('expanded');
+      btn.textContent = expanded ? 'Show less' : 'Show more';
+      btn.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+    });
+
+    // Star functionality with localStorage persistence
+    (function(){
+      const STAR_IDS_KEY = 'starred_ids_v1';
+      const STAR_MAP_KEY = 'starred_map_v1';
+      const starCountEl = document.getElementById('star-count');
+      function _loadIds(){
+        try { return new Set(JSON.parse(localStorage.getItem(STAR_IDS_KEY) || '[]')); } catch { return new Set(); }
+      }
+      function _saveIds(set){
+        localStorage.setItem(STAR_IDS_KEY, JSON.stringify(Array.from(set)));
+      }
+      function _loadMap(){
+        try { return JSON.parse(localStorage.getItem(STAR_MAP_KEY) || '{}'); } catch { return {}; }
+      }
+      function _saveMap(map){
+        localStorage.setItem(STAR_MAP_KEY, JSON.stringify(map));
+      }
+      function _rowDataForButton(btn){
+        const tr = btn.closest('tr');
+        const id = btn.dataset.id;
+        const title = tr.querySelector('td.title')?.childNodes[0]?.textContent?.trim() || '';
+        const year = tr.querySelector('td:nth-child(3)')?.textContent?.trim() || '';
+        const citations = tr.querySelector('td:nth-child(4)')?.textContent?.trim() || '';
+        const license = tr.querySelector('td:nth-child(5)')?.innerText?.trim() || '';
+        // provenance badges/links live under title cell; try to extract source/links
+        const sourceBadge = tr.querySelector('.provenance .badge')?.textContent?.trim() || '';
+        const links = Array.from(tr.querySelectorAll('.provenance a')).map(a => ({ label: a.textContent || '', href: a.getAttribute('href') || '' }));
+        return { id, title, year, citation_count: citations, license, source: sourceBadge, links };
+      }
+      function _updateUiFromState(){
+        const ids = _loadIds();
+        document.querySelectorAll('button.star[data-id]').forEach(btn => {
+          const id = btn.dataset.id;
+          const active = ids.has(id);
+          btn.textContent = active ? '★' : '☆';
+          btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+          btn.style.color = active ? '#e5a50a' : '#444';
+        });
+        if (starCountEl) starCountEl.textContent = `Starred: ${ids.size}`;
+      }
+      document.addEventListener('click', (e) => {
+        const btn = e.target.closest('button.star');
+        if (!btn) return;
+        const ids = _loadIds();
+        const map = _loadMap();
+        const id = btn.dataset.id;
+        if (ids.has(id)) {
+          ids.delete(id);
+          delete map[id];
+        } else {
+          ids.add(id);
+          map[id] = _rowDataForButton(btn);
+        }
+        _saveIds(ids);
+        _saveMap(map);
+        _updateUiFromState();
+        try { window.__telemetry.sendTelemetry('star_toggled', { id, active: ids.has(id) ? 1 : 0 }); } catch {}
+      });
+      // initialize on load
+      _updateUiFromState();
+    })();
+
+    // Export helpers (CSV)
+    (function(){
+      function toCsv(rows){
+        const esc = (v) => {
+          const s = String(v ?? '').replaceAll('"', '""');
+          return `"${s}"`;
+        };
+        return rows.map(r => [
+          esc(r.id), esc(r.title), esc(r.year), esc(r.citation_count), esc(r.license), esc(r.source), esc((r.links||[]).map(l=>l.href).join(' '))
+        ].join(',')).join('\n');
+      }
+      function download(filename, content){
+        const blob = new Blob([content], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = filename; document.body.appendChild(a); a.click(); a.remove();
+        URL.revokeObjectURL(url);
+      }
+      function collectVisible(){
+        const rows = [];
+        document.querySelectorAll('tbody > tr').forEach(tr => {
+          if (tr.classList.contains('row-details')) return;
+          const idBtn = tr.querySelector('button.star[data-id]');
+          if (!idBtn) return;
+          const fakeBtn = idBtn; // reuse row extraction
+          rows.push((function(btn){
+            const r = {};
+            Object.assign(r, (function(){
+              const t = btn.closest('tr');
+              const id = btn.dataset.id;
+              const title = t.querySelector('td.title')?.childNodes[0]?.textContent?.trim() || '';
+              const year = t.querySelector('td:nth-child(3)')?.textContent?.trim() || '';
+              const citations = t.querySelector('td:nth-child(4)')?.textContent?.trim() || '';
+              const license = t.querySelector('td:nth-child(5)')?.innerText?.trim() || '';
+              const sourceBadge = t.querySelector('.provenance .badge')?.textContent?.trim() || '';
+              const links = Array.from(t.querySelectorAll('.provenance a')).map(a => ({ label: a.textContent || '', href: a.getAttribute('href') || '' }));
+              return { id, title, year, citation_count: citations, license, source: sourceBadge, links };
+            })());
+            return r;
+          })(fakeBtn));
+        });
+        return rows;
+      }
+      function loadStarred(){
+        try { return Object.values(JSON.parse(localStorage.getItem('starred_map_v1') || '{}')); } catch { return []; }
+      }
+      const btnVisible = document.getElementById('export-visible');
+      const btnStarred = document.getElementById('export-starred');
+      btnVisible?.addEventListener('click', () => {
+        const rows = collectVisible();
+        const header = 'id,title,year,citation_count,license,source,links\n';
+        download('export-visible.csv', header + toCsv(rows));
+        try { window.__telemetry.sendTelemetry('export_clicked', { variant: 'visible', count: rows.length }); } catch {}
+      });
+      btnStarred?.addEventListener('click', () => {
+        const rows = loadStarred();
+        const header = 'id,title,year,citation_count,license,source,links\n';
+        download('export-starred.csv', header + toCsv(rows));
+        try { window.__telemetry.sendTelemetry('export_clicked', { variant: 'starred', count: rows.length }); } catch {}
+      });
+    })();
+
+    // Log results event (and zero-result if applicable) on page render
+    (function(){
+      try {
+        const meta = document.getElementById('result-meta');
+        if (!meta) return;
+        const totalRaw = meta.getAttribute('data-total') || '';
+        if (totalRaw === '') return; // no search this render
+        const total = Number(totalRaw) || 0;
+        const latencyServer = Number(meta.getAttribute('data-latency') || '') || null;
+        const p = new URLSearchParams(window.location.search);
+        const q = p.get('q') || '';
+        const t0 = Number(sessionStorage.getItem('last_search_t0_ms') || '');
+        const clientLatency = t0 ? (Date.now() - t0) : null;
+        // Persist lightweight last payload for debug overlay
+        try {
+          const payload = {
+            url: window.location.pathname + window.location.search,
+            filters: window.__telemetry.currentFiltersFromUrl(),
+            total,
+            latency_ms: latencyServer,
+            client_nav_latency_ms: clientLatency,
+            sort: meta.getAttribute('data-sort') || ''
+          };
+          sessionStorage.setItem('last_search_payload', JSON.stringify(payload));
+        } catch {}
+        (async () => {
+          const query_hash = await window.__telemetry.sha256Hex(q);
+          const filters = window.__telemetry.currentFiltersFromUrl();
+          window.__telemetry.sendTelemetry('search_results', {
+            query_hash,
+            total,
+            latency_ms: latencyServer,
+            client_nav_latency_ms: clientLatency,
+            filters
+          });
+          if (total === 0) {
+            window.__telemetry.sendTelemetry('zero_result', { query_hash, filters });
+          }
+        })();
+      } catch {}
+    })();
+
+    // Debug overlay behavior
+    (function(){
+      const toggle = document.getElementById('debug-toggle');
+      const panel = document.getElementById('debug-overlay');
+      const meta = document.getElementById('result-meta');
+      function populate(){
+        try {
+          const payloadStr = sessionStorage.getItem('last_search_payload') || '{}';
+          const payload = JSON.parse(payloadStr);
+          document.getElementById('dbg-total').textContent = String(payload.total ?? (meta?.getAttribute('data-total') || '-'));
+          document.getElementById('dbg-latency').textContent = String(payload.latency_ms ?? (meta?.getAttribute('data-latency') || '-'));
+          document.getElementById('dbg-sort').textContent = String(payload.sort ?? (meta?.getAttribute('data-sort') || '-'));
+          document.getElementById('dbg-payload').textContent = JSON.stringify(payload, null, 2);
+        } catch {}
+      }
+      toggle?.addEventListener('click', () => {
+        const visible = panel.style.display === 'block';
+        panel.style.display = visible ? 'none' : 'block';
+        toggle.setAttribute('aria-expanded', visible ? 'false' : 'true');
+        if (!visible) populate();
+      });
+      // Auto-populate once on load if already visible (unlikely)
+      if (panel && panel.style.display !== 'none') populate();
+    })();
   </script>
 </body>
 </html>
