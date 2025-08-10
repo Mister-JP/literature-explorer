@@ -280,7 +280,7 @@ def ui_search(
 
 
 @app.post("/ui/report")
-def ui_report(
+async def ui_report(
     request: Request,
 ) -> JSONResponse:
     """Accept lightweight, privacy-safe UI feedback events.
@@ -296,12 +296,9 @@ def ui_report(
     settings = Settings.from_env()
     session_factory = create_session_factory(settings.database_url)
     try:
-        body = request.json()  # type: ignore[attr-defined]
+        body = await request.json()
     except Exception:
-        # Fallback for sync path; FastAPI Request.json is async but here we keep it simple
-        import json
-
-        body = json.loads(request._body.decode() if getattr(request, "_body", None) else "{}")
+        body = {}
 
     if not isinstance(body, dict):
         raise HTTPException(status_code=400, detail="Invalid JSON body")
@@ -321,7 +318,7 @@ def ui_report(
 
 
 @app.post("/ui/telemetry")
-def ui_telemetry(request: Request) -> JSONResponse:
+async def ui_telemetry(request: Request) -> JSONResponse:
     """Persist privacy-safe UI telemetry events.
 
     Expected JSON body (best-effort parsed):
@@ -339,13 +336,9 @@ def ui_telemetry(request: Request) -> JSONResponse:
     settings = Settings.from_env()
     session_factory = create_session_factory(settings.database_url)
     try:
-        body = request.json()  # type: ignore[attr-defined]
+        body = await request.json()
     except Exception:
-        import json
-
-        body = json.loads(
-            request._body.decode() if getattr(request, "_body", None) else "{}"  # type: ignore[attr-defined]
-        )
+        body = {}
 
     if not isinstance(body, dict):
         # Return 200 with ok:false to avoid client disruption

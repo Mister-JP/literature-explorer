@@ -9,32 +9,100 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    services:
+      search:
+        image: opensearchproject/opensearch:2.11.1
+        env:
+          discovery.type: single-node
+          plugins.security.disabled: 'true'
+          OPENSEARCH_JAVA_OPTS: -Xms512m -Xmx512m
+        ports:
+          - 9200:9200
+        options: >-
+          --health-cmd="bash -lc 'curl -s http://localhost:9200 | grep opensearch || exit 1'"
+          --health-interval=10s --health-timeout=5s --health-retries=30
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
       - name: Install Poetry
-        uses: abatilo/actions-poetry@v2
-        with:
-          poetry-version: '1.8.3'
+        run: pip install poetry
 
       - name: Install dependencies
         run: |
           poetry install --no-interaction --no-root
+
+      - name: Install Playwright browsers
+        run: |
+          poetry run playwright install chromium
+
+      - name: Install Playwright OS dependencies (Linux)
+        run: |
+          PW_BIN=$(poetry run which playwright)
+          echo "Using playwright at: $PW_BIN"
+          sudo $PW_BIN install-deps
 
       - name: Lint
         run: |
           poetry run ruff check .
           poetry run black --check .
 
-      - name: Test
+      - name: Unit tests (backend only)
+        run: poetry run pytest -q tests
+
+      - name: Verify OpenSearch service
         run: |
-          poetry run pytest -q
+          for i in {1..30}; do curl -sSf http://localhost:9200 >/dev/null && break || sleep 1; done
+          curl -sS http://localhost:9200 || true
+
+      - name: Seed demo data and reindex
+        env:
+          SEARCH_HOST: http://localhost:9200
+          PYTHONPATH: src
+        run: |
+          mkdir -p data data/pdfs
+          poetry run python -c "import ingestion.api; print('ingestion.api import OK')"
+          poetry run python -m ingestion.cli seed-demo-ui
+          poetry run python -m ingestion.cli reindex
+
+      - name: Start API (for E2E)
+        env:
+          BASE_URL: http://127.0.0.1:8000
+          SEARCH_HOST: http://localhost:9200
+        run: |
+          nohup env PYTHONPATH=src poetry run uvicorn ingestion.api:app --host 127.0.0.1 --port 8000 --log-level debug > uvicorn.log 2>&1 &
+          for i in {1..120}; do grep -q "Application startup complete" uvicorn.log && break || sleep 1; done
+          echo "--- uvicorn.log (head) ---" && head -n 200 uvicorn.log || true
+          echo "--- uvicorn.log (tail) ---" && tail -n 200 uvicorn.log || true
+          ps aux | grep uvicorn | grep -v grep || true
+          curl -sf http://127.0.0.1:8000/ui/search || true
+
+      - name: E2E tests (UI)
+        env:
+          BASE_URL: http://127.0.0.1:8000
+        run: |
+          poetry run pytest -q ui-tests/e2e
+
+      - name: Collect diagnostics (always)
+        if: always()
+        run: |
+          echo "--- service search status (nc) ---" && (echo > /dev/tcp/127.0.0.1/9200) >/dev/null 2>&1 && echo "9200 open" || echo "9200 closed"
+          echo "--- uvicorn.log (tail) ---" && tail -n 500 uvicorn.log || true
+          (curl -sS http://localhost:9200 >/tmp/opensearch_root.json 2>/dev/null && echo "saved opensearch_root.json") || true
+          (curl -sS http://127.0.0.1:8000/ui/search >/tmp/ui_search_root.html 2>/dev/null && echo "saved ui_search_root.html") || true
+
+      - name: Upload diagnostics artifacts (always)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-diagnostics
+          path: |
+            uvicorn.log
+            /tmp/opensearch_root.json
+            /tmp/ui_search_root.html
 
 
